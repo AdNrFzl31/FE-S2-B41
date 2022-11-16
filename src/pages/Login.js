@@ -36,6 +36,8 @@ const style = {
 
 const Login = (props) => {
     return (
+
+        
         <Modal {...props} size="md" centered>
             <Modal.Body>
                 <Modal.Title style={style.textLogin} className="mb-3" >Login</Modal.Title>
@@ -51,6 +53,8 @@ const Login = (props) => {
                 </Form>
             </Modal.Body>
         </Modal>
+        
+    
     );
 }
 

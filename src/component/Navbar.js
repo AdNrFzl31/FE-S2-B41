@@ -66,7 +66,7 @@ function Navs() {
         <Navbar.Collapse id="responsive-navbar-nav" className="justify-content-end gap-3">
           <Nav className="me-auto"></Nav>
           <Nav>
-
+            
             {showStatus ?
               <StatusOn />
               :

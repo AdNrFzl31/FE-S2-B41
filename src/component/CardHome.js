@@ -26,8 +26,6 @@ const style = {
     },
 
     cardTitle: {
-        fontFamily: "Freight",
-        fontStyle: "Sans Black SC",
         fontSize: "60px",
         lineHeight: "100%",
         align: "Left",
@@ -40,7 +38,7 @@ const style = {
     },
 }
 
-function Cards() {
+function CardHome() {
     return (
         // <Container className='mt-5 w-90'>
             <Card style={style.card}>
@@ -63,4 +61,4 @@ function Cards() {
     );
 }
 
-export default Cards;
+export default CardHome;

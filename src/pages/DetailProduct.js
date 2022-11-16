@@ -39,8 +39,6 @@ const style = {
   },
 
   cardTitle: {
-    fontFamily: "Freight",
-    fontStyle: "Sans Black SC",
     fontSize: "47px",
     lineHeight: "100%",
     align: "Left",
@@ -54,12 +52,13 @@ const style = {
 
   textToping: {
     color: "#BD0707",
+    textAlign: "center",
   },
 
   imgToping: {
     width: "25%",
     height: "auto",
-    // position: "absolute",
+    marginLeft: "40%",
   },
 
   bgColor: {
@@ -68,84 +67,96 @@ const style = {
 };
 function DetailProduct() {
   return (
-    <Container className="my-5 w-90">
-      <Card border="light" style={style.card}>
+    <Container className="my-5">
+      <Card border="white" style={style.card}>
         <Row>
           <Card.Img style={style.imgProduct} src={Product} />
           <Card.Img src={Logo} style={style.ImgLogo} />
           <Card.Body className="my-2" style={style.cardBody}>
-            <Col>
-              <Card.Title style={style.cardTitle}>
-                Ice Coffee Palm Sugar
-              </Card.Title>
-              <Card.Text style={style.cardText}>Rp.27.000</Card.Text>
-              <div className="mt-5">
-                <Card.Text style={style.cardText}>Toping</Card.Text>
-                <Row xs="4" className="m-2">
-                  <div>
-                    <Card.Img style={style.imgToping} src={Toping1} />
-                    <Card.Text style={style.textToping}>
-                      Bubble Tea Gelatin
-                    </Card.Text>
-                  </div>
-                  <div>
-                    <Card.Img style={style.imgToping} src={Toping2} />
-                    <Card.Text style={style.textToping}>Manggo</Card.Text>
-                  </div>
-                  <div>
-                    <Card.Img style={style.imgToping} src={Toping3} />
-                    <Card.Text style={style.textToping}>
-                      Green Coconut
-                    </Card.Text>
-                  </div>
-                  <div>
-                    <Card.Img style={style.imgToping} src={Toping4} />
-                    <Card.Text style={style.textToping}>Boba Manggo</Card.Text>
-                  </div>
-                </Row>
-                <Row xs="4" className="m-2">
-                  <div>
-                    <Card.Img style={style.imgToping} src={Toping5} />
-                    <Card.Text style={style.textToping}>
-                      Bill Berry Boba
-                    </Card.Text>
-                  </div>
-                  <div>
-                    <Card.Img style={style.imgToping} src={Toping6} />
-                    <Card.Text style={style.textToping}>
-                      Kiwi Popping Pearl
-                    </Card.Text>
-                  </div>
-                  <div>
-                    <Card.Img style={style.imgToping} src={Toping7} />
-                    <Card.Text style={style.textToping}>
-                      Matcha Cantaloupe
-                    </Card.Text>
-                  </div>
-                  <div>
-                    <Card.Img style={style.imgToping} src={Toping8} />
-                    <Card.Text style={style.textToping}>
-                      Strawberry Popping
-                    </Card.Text>
-                  </div>
-                </Row>
-              </div>
-              <Row className="m-4">
-                <Col xs={12} md={10}>
-                  <Card.Text style={style.cardText}>Total</Card.Text>
-                </Col>
-                <Col xs={6} md={2}>
-                  <Card.Text style={style.cardText}>Rp.27.000</Card.Text>
-                </Col>
+            
+            <Card.Title style={style.cardTitle}>
+              Ice Coffee Palm Sugar
+            </Card.Title>
+            <Card.Text style={style.cardText}>Rp.27.000</Card.Text>
+
+            <div className="mt-5">
+              <Card.Text style={style.cardText}>Toping</Card.Text>
+              <Row xs="4" className="m-2">
+                {/* Toping 1 */}
+                <div>
+                  <Card.Img style={style.imgToping} src={Toping1} />
+                  <Card.Text style={style.textToping}>
+                    Bubble Tea Gelatin
+                  </Card.Text>
+                </div>
+
+                {/* Toping 2 */}
+                <div>
+                  <Card.Img style={style.imgToping} src={Toping2} />
+                  <Card.Text style={style.textToping}>Manggo</Card.Text>
+                </div>
+
+                {/* Toping 3 */}
+                <div>
+                  <Card.Img style={style.imgToping} src={Toping3} />
+                  <Card.Text style={style.textToping}>Green Coconut</Card.Text>
+                </div>
+
+                {/* Toping 4 */}
+                <div>
+                  <Card.Img style={style.imgToping} src={Toping4} />
+                  <Card.Text style={style.textToping}>Boba Manggo</Card.Text>
+                </div>
               </Row>
-              <Button
-                className="w-100"
-                variant="outline-light"
-                style={style.bgColor}
-              >
-                Add Cart
-              </Button>
-            </Col>
+              <Row xs="4" className="m-2">
+                {/* Toping 5 */}
+                <div>
+                  <Card.Img style={style.imgToping} src={Toping5} />
+                  <Card.Text style={style.textToping}>
+                    Bill Berry Boba
+                  </Card.Text>
+                </div>
+
+                {/* Toping 6 */}
+                <div>
+                  <Card.Img style={style.imgToping} src={Toping6} />
+                  <Card.Text style={style.textToping}>
+                    Kiwi Popping Pearl
+                  </Card.Text>
+                </div>
+
+                {/* Toping 7 */}
+                <div>
+                  <Card.Img style={style.imgToping} src={Toping7} />
+                  <Card.Text style={style.textToping}>
+                    Matcha Cantaloupe
+                  </Card.Text>
+                </div>
+
+                {/* Toping 8 */}
+                <div>
+                  <Card.Img style={style.imgToping} src={Toping8} />
+                  <Card.Text style={style.textToping}>
+                    Strawberry Popping
+                  </Card.Text>
+                </div>
+              </Row>
+            </div>
+            <Row className="m-4">
+              <Col xs={12} md={10}>
+                <Card.Text style={style.cardText}>Total</Card.Text>
+              </Col>
+              <Col xs={6} md={2}>
+                <Card.Text style={style.cardText}>Rp.27.000</Card.Text>
+              </Col>
+            </Row>
+            <Button
+              className="w-100"
+              variant="outline-light"
+              style={style.bgColor}
+            >
+              Add Cart
+            </Button>
           </Card.Body>
         </Row>
       </Card>

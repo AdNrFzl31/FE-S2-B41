@@ -1,20 +1,19 @@
 import "bootstrap/dist/css/bootstrap.min.css";
-import React from 'react';
-import { Container, Nav, Navbar } from 'react-bootstrap';
+import React from "react";
+import { Container, Nav, Navbar } from "react-bootstrap";
 // import NavDropdown from 'react-bootstrap/NavDropdown';s
 import Basket from "../assets/image/Basket.png";
 import Image from "../assets/image/Logo1.png";
-import Profile from "../assets/image/Profil1.png";
-
+import DropdownUser from "./DropdownUser";
 
 // import { BrowserRouter as Router, Route, Routes, Link } from 'react-router-dom'
 
-function Navs2() {
+function NavsUser() {
   return (
     <Navbar collapseOnSelect expand="lg" bg="light" variant="light">
       <Container>
         <Navbar.Brand href="#home">
-          <Nav.Link to="/">
+          <Nav.Link href="/">
             <img
               alt=""
               src={Image}
@@ -25,7 +24,10 @@ function Navs2() {
           </Nav.Link>
         </Navbar.Brand>
         <Navbar.Toggle aria-controls="responsive-navbar-nav" />
-        <Navbar.Collapse id="responsive-navbar-nav" className="justify-content-end gap-3">
+        <Navbar.Collapse
+          id="responsive-navbar-nav"
+          className="justify-content-end gap-3"
+        >
           <Nav className="me-auto"></Nav>
           <Nav.Link to="/" className="mx-3">
             <img
@@ -36,20 +38,11 @@ function Navs2() {
               className="d-inline-block align-top"
             />
           </Nav.Link>
-          <Nav.Link to="/">
-            <img
-              alt=""
-              src={Profile}
-              width="50"
-              height="50"
-              className="d-inline-block align-top"
-            />
-          </Nav.Link>
+          <DropdownUser/>
         </Navbar.Collapse>
       </Container>
     </Navbar>
-
   );
 }
 
-export default Navs2
+export default NavsUser;
