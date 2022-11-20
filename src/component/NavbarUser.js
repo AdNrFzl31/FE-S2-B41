@@ -1,10 +1,10 @@
-import "bootstrap/dist/css/bootstrap.min.css";
-import React from "react";
-import { Container, Nav, Navbar } from "react-bootstrap";
+import "bootstrap/dist/css/bootstrap.min.css"
+import React from "react"
+import { Container, Nav, Navbar } from "react-bootstrap"
 // import NavDropdown from 'react-bootstrap/NavDropdown';s
-import Basket from "../assets/image/Basket.png";
-import Image from "../assets/image/Logo1.png";
-import DropdownUser from "./DropdownUser";
+import Basket from "../assets/image/Basket.png"
+import Image from "../assets/image/Logo1.png"
+import DropdownUser from "./DropdownUser"
 
 // import { BrowserRouter as Router, Route, Routes, Link } from 'react-router-dom'
 
@@ -29,7 +29,7 @@ function NavsUser() {
           className="justify-content-end gap-3"
         >
           <Nav className="me-auto"></Nav>
-          <Nav.Link to="/" className="mx-3">
+          <Nav.Link href="/Cart" className="mx-3">
             <img
               alt=""
               src={Basket}
@@ -38,11 +38,11 @@ function NavsUser() {
               className="d-inline-block align-top"
             />
           </Nav.Link>
-          <DropdownUser/>
+          <DropdownUser />
         </Navbar.Collapse>
       </Container>
     </Navbar>
-  );
+  )
 }
 
-export default NavsUser;
+export default NavsUser

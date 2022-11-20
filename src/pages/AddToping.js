@@ -31,54 +31,45 @@ const style = {
     color: "black",
   },
 
-  ImgProduct: {
+  ImgToping: {
     position: "relative",
     width: "350px",
   },
-
-  // Image Product 1
-  ImgLogo: {
-    position: "absolute",
-    width: "130px",
-    height: "auto",
-    top: "35%",
-    left: "77%",
-  },
 }
 
-function AddProduct() {
-  const products = []
-  const [DataProduct, setState] = useState({
+function AddToping() {
+  const topings = []
+  const [DataToping, setState] = useState({
     id: 0,
-    nameProduct: "",
+    nameToping: "",
     price: 0,
-    imgProduct: "",
+    imgToping: "",
   })
+  const addDataToping = JSON.parse(localStorage.getItem("DATA_TOPING"))
 
   const handleOnChange = (e) => {
     setState({
-      ...DataProduct,
+      ...DataToping,
       [e.target.name]: e.target.value,
     })
   }
 
-  const addDataProduct = JSON.parse(localStorage.getItem("DATA_PRODUCT"))
   const handleOnSubmit = (e) => {
     e.preventDefault()
 
-    if (addDataProduct === null) {
-      products.push(DataProduct)
-      localStorage.setItem("DATA_PRODUCT", JSON.stringify(products))
+    if (addDataToping === null) {
+      topings.push(DataToping)
+      localStorage.setItem("DATA_TOPING", JSON.stringify(topings))
     } else {
-      for (let i = 0; i < addDataProduct.length; i++) {
-        products.push(addDataProduct[i])
+      for (let i = 0; i < addDataToping.length; i++) {
+        topings.push(addDataToping[i])
       }
-      DataProduct.id = addDataProduct.length
-      DataProduct.price = parseInt(DataProduct.price)
-      products.push(DataProduct)
-      localStorage.setItem("DATA_PRODUCT", JSON.stringify(products))
+      DataToping.id = addDataToping.length
+      DataToping.price = parseInt(DataToping.price)
+      topings.push(DataToping)
+      localStorage.setItem("DATA_TOPING", JSON.stringify(topings))
     }
-    document.getElementById("addProduct").reset()
+    document.getElementById("addToping").reset()
   }
 
   return (
@@ -88,23 +79,20 @@ function AddProduct() {
           <Col sm={8}>
             <Card.Body className="m-auto" style={{ width: "80%" }}>
               <Card.Title className="mb-5" style={style.textTitle}>
-                Product
+                Toping
               </Card.Title>
               <Form
                 onSubmit={handleOnSubmit}
-                id="addProduct"
+                id="addToping"
                 className="m-auto mt-3 d-grid gap-2 w-100"
               >
                 <Form.Group className="mb-3 " controlId="nameProduct">
                   <Form.Control
                     onChange={handleOnChange}
-                    name="nameProduct"
-                    style={{
-                      border: "2px solid #BD0707",
-                      backgroundColor: "#E0C8C840",
-                    }}
+                    name="nameToping"
+                    style={{ border: "2px solid #BD0707" }}
                     type="text"
-                    placeholder="Name Product"
+                    placeholder="Name Toping"
                   />
                 </Form.Group>
                 <Form.Group className="mb-3" controlId="price">
@@ -116,10 +104,10 @@ function AddProduct() {
                     placeholder="Price"
                   />
                 </Form.Group>
-                <Form.Group className="mb-3" controlId="imgProduct">
+                <Form.Group className="mb-3" controlId="photoProduct">
                   <Form.Control
                     onChange={handleOnChange}
-                    name="imgProduct"
+                    name="imgToping"
                     style={{ border: "2px solid #BD0707" }}
                     type="text"
                     placeholder="Photo Product"
@@ -130,15 +118,15 @@ function AddProduct() {
                   style={style.bgColor}
                   type="submit"
                 >
-                  Add Product
+                  Add Toping
                 </Button>
               </Form>
             </Card.Body>
           </Col>
           <Card.Img
             variant="top"
-            src={DataProduct.imgProduct}
-            style={style.ImgProduct}
+            src={DataToping.imgToping}
+            style={style.ImgToping}
           />
         </Row>
       </Card>
@@ -146,4 +134,4 @@ function AddProduct() {
   )
 }
 
-export default AddProduct
+export default AddToping

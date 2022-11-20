@@ -32,7 +32,6 @@ const style = {
 
   imgLogo: {
     // position: "absolute",
-    
     // top: "8%",
     // left: "85%",
     // justifyContent: "center"
@@ -40,7 +39,6 @@ const style = {
 
   imgBarcode: {
     // position: "absolute",
-    
     // top: "40%",
     // left: "83%",
   },
@@ -183,20 +181,22 @@ function Transaction() {
           <Col style={{ width: "20%" }}>
             <Card.Body className="mt-3">
               <Stack className="gap-3 m-1">
-                <Card.Img className="ms-4" src={Logo} style={{width: "100px",
-    height: "auto",}} />
+                <Card.Img
+                  className="ms-4"
+                  src={Logo}
+                  style={{ width: "100px", height: "auto" }}
+                />
                 <Card.Img
                   className="mt-3"
                   src={Barcode}
-                  style={{width: "125px",
-                  height: "auto",}}
+                  style={{ width: "125px", height: "auto" }}
                 />
                 <Button
-                  style={{ border: "white", backgroundColor: "#00D1FF" }}
-                  className="mt-4"
+                  style={{ border: "white", backgroundColor: "#FF9900" }}
+                  className="mt-4 w-100 p-2"
                   disabled
                 >
-                  On The Wayt
+                  Waiting Approve
                 </Button>
                 <Card.Text
                   style={{ color: "#974A4A", fontWeight: "bold" }}

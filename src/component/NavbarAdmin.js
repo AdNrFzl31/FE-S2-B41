@@ -1,9 +1,9 @@
-import "bootstrap/dist/css/bootstrap.min.css";
-import React from "react";
-import { Container, Nav, Navbar } from "react-bootstrap";
+import "bootstrap/dist/css/bootstrap.min.css"
+import React from "react"
+import { Container, Nav, Navbar } from "react-bootstrap"
 // import NavDropdown from 'react-bootstrap/NavDropdown';s
-import Image from "../assets/image/Logo1.png";
-import DropdownAdmin from "./DropdownAdmin";
+import Image from "../assets/image/Logo1.png"
+import DropdownAdmin from "./DropdownAdmin"
 
 // import { BrowserRouter as Router, Route, Routes, Link } from 'react-router-dom'
 
@@ -28,11 +28,11 @@ function NavsAdmin() {
           className="justify-content-end gap-3"
         >
           <Nav className="me-auto"></Nav>
-          <DropdownAdmin/>
+          <DropdownAdmin />
         </Navbar.Collapse>
       </Container>
     </Navbar>
-  );
+  )
 }
 
-export default NavsAdmin;
+export default NavsAdmin

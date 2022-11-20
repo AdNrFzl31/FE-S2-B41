@@ -1,11 +1,7 @@
-import "bootstrap/dist/css/bootstrap.min.css";
-import { Card, Row } from "react-bootstrap";
-import Logo from "../assets/image/Logo2.png";
-import Product from "../assets/image/Product1.png";
-import Product2 from "../assets/image/Product2.png";
-import Product3 from "../assets/image/Product3.png";
-import Product4 from "../assets/image/Product4.png";
-import { Link } from "react-router-dom";
+import "bootstrap/dist/css/bootstrap.min.css"
+import { Card, Row } from "react-bootstrap"
+import { useNavigate } from "react-router-dom"
+import ListProduct from "./ListProduct"
 
 // import { BrowserRouter as Router, Routes, Route, Link  } from 'react-router-dom';
 
@@ -67,53 +63,44 @@ const style = {
     top: "38%",
     left: "36%",
   },
-};
-function Products() {
-  return (
-    <Row className="gap-4 justify-content-center">
-      {/* Product 1 */}
-      <Card border="light" style={style.card}>
-        <Link to="/DetailProduct">
-          <Card.Img variant="top" src={Product} style={style.ImgProduct} />
-          <Card.Img src={Logo} style={style.ImgLogo} />
-        </Link>
-          <Card.Body>
-            <Card.Title style={style.title}>Ice Coffee Palm Sugar</Card.Title>
-            <Card.Text style={style.price}>Rp.27.000</Card.Text>
-          </Card.Body>
-      </Card>
-
-      {/* Product 2 */}
-      <Card border="light" style={style.card}>
-        <Card.Img variant="top" src={Product2} style={style.ImgProduct} />
-        <Card.Img src={Logo} style={style.ImgLogo2} />
-        <Card.Body>
-          <Card.Title style={style.title}>Ice Coffee Green Tea</Card.Title>
-          <Card.Text style={style.price}>Rp.31.000</Card.Text>
-        </Card.Body>
-      </Card>
-
-      {/* Product 3 */}
-      <Card border="light" style={style.card}>
-        <Card.Img variant="top" src={Product3} style={style.ImgProduct} />
-        <Card.Img src={Logo} style={style.ImgLogo3} />
-        <Card.Body>
-          <Card.Title style={style.title}>Hanami Latte</Card.Title>
-          <Card.Text style={style.price}>Rp.29.000</Card.Text>
-        </Card.Body>
-      </Card>
-
-      {/* Product 4 */}
-      <Card border="light" style={style.card}>
-        <Card.Img variant="top" src={Product4} style={style.ImgProduct} />
-        <Card.Img src={Logo} style={style.ImgLogo4} />
-        <Card.Body>
-          <Card.Title style={style.title}>Clepon Coffee</Card.Title>
-          <Card.Text style={style.price}>Rp.28.000</Card.Text>
-        </Card.Body>
-      </Card>
-    </Row>
-  );
 }
 
-export default Products;
+function Products() {
+  const DataProduct = JSON.parse(localStorage.getItem("DATA_PRODUCT"))
+
+  return (
+    <Row className="d-flex gap-4 justify-content-center">
+      {DataProduct.map((product) => (
+        <Product
+          id={product.id}
+          name={product.nameProduct}
+          order={product.imgProduct}
+          price={product.price}
+        />
+      ))}
+    </Row>
+  )
+}
+
+function Product(props) {
+  const navigate = useNavigate()
+  return (
+    <>
+      <Card
+        border="light"
+        style={style.card}
+        onClick={() => {
+          navigate(`/DetailProduct/${props.id}`)
+        }}
+      >
+        <Card.Img variant="top" src={props.order} style={style.ImgProduct} />
+        <Card.Body>
+          <Card.Title style={style.title}>{props.name}</Card.Title>
+          <Card.Text style={style.price}>IDR {props.price}</Card.Text>
+        </Card.Body>
+      </Card>
+    </>
+  )
+}
+
+export default Products

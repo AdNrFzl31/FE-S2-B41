@@ -1,15 +1,11 @@
-import "bootstrap/dist/css/bootstrap.min.css";
-import { Button, Card, Col, Container, Row } from "react-bootstrap";
-import Product from "../assets/image/Product1.png";
-import Logo from "../assets/image/Logo2.png";
-import Toping1 from "../assets/image/Toping1.png";
-import Toping2 from "../assets/image/Toping2.png";
-import Toping3 from "../assets/image/Toping3.png";
-import Toping4 from "../assets/image/Toping4.png";
-import Toping5 from "../assets/image/Toping5.png";
-import Toping6 from "../assets/image/Toping6.png";
-import Toping7 from "../assets/image/Toping7.png";
-import Toping8 from "../assets/image/Toping8.png";
+import { useState } from "react"
+import "bootstrap/dist/css/bootstrap.min.css"
+import { Button, Card, Col, Container, Row, Badge } from "react-bootstrap"
+import { useParams } from "react-router-dom"
+import Approve from "../assets/image/Approve.png"
+import ListProduct from "../component/ListProduct"
+import ListToping from "../component/ListToping"
+import SelectToping from "../component/SelectToping"
 
 // import { BrowserRouter as Router, Routes, Route, Link  } from 'react-router-dom';
 
@@ -24,14 +20,6 @@ const style = {
     width: "30%",
     height: "80%",
     // position: "absolute",
-  },
-
-  ImgLogo: {
-    position: "absolute",
-    width: "125px",
-    height: "auto",
-    top: "26%",
-    left: "9%",
   },
 
   cardBody: {
@@ -64,82 +52,86 @@ const style = {
   bgColor: {
     backgroundColor: "#BD0707",
   },
-};
+}
 function DetailProduct() {
+  const { id } = useParams()
+  const DataProduct = JSON.parse(localStorage.getItem("DATA_PRODUCT"))
+  const DataToping = JSON.parse(localStorage.getItem("DATA_TOPING"))
+
+  const formatIDR = new Intl.NumberFormat(undefined, {
+    style: "currency",
+    currency: "IDR",
+    maximumFractionDigits: 0,
+  })
+
+  const [topingCheck, setTopingCheck] = useState([])
+  const [topingPrice, setTopingPrice] = useState(0)
+
+  const handleChecked = (id, price) => {
+    let filterID = topingCheck.filter((e) => e === id)
+    if (filterID[0] !== id) {
+      setTopingCheck([...topingCheck, id])
+      setTopingPrice(topingPrice + price)
+    } else {
+      setTopingCheck(topingCheck.filter((e) => e !== id))
+      setTopingPrice(topingPrice - price)
+    }
+  }
+
   return (
     <Container className="my-5">
       <Card border="white" style={style.card}>
         <Row>
-          <Card.Img style={style.imgProduct} src={Product} />
-          <Card.Img src={Logo} style={style.ImgLogo} />
+          <Card.Img
+            alt=""
+            style={style.imgProduct}
+            src={DataProduct[id].imgProduct}
+          />
           <Card.Body className="my-2" style={style.cardBody}>
-            
             <Card.Title style={style.cardTitle}>
-              Ice Coffee Palm Sugar
+              {DataProduct[id].nameProduct}
             </Card.Title>
-            <Card.Text style={style.cardText}>Rp.27.000</Card.Text>
+            <Card.Text style={style.cardText}>
+              {formatIDR.format(DataProduct[id].price)}
+            </Card.Text>
 
             <div className="mt-5">
               <Card.Text style={style.cardText}>Toping</Card.Text>
               <Row xs="4" className="m-2">
-                {/* Toping 1 */}
-                <div>
-                  <Card.Img style={style.imgToping} src={Toping1} />
-                  <Card.Text style={style.textToping}>
-                    Bubble Tea Gelatin
-                  </Card.Text>
-                </div>
-
-                {/* Toping 2 */}
-                <div>
-                  <Card.Img style={style.imgToping} src={Toping2} />
-                  <Card.Text style={style.textToping}>Manggo</Card.Text>
-                </div>
-
-                {/* Toping 3 */}
-                <div>
-                  <Card.Img style={style.imgToping} src={Toping3} />
-                  <Card.Text style={style.textToping}>Green Coconut</Card.Text>
-                </div>
-
-                {/* Toping 4 */}
-                <div>
-                  <Card.Img style={style.imgToping} src={Toping4} />
-                  <Card.Text style={style.textToping}>Boba Manggo</Card.Text>
-                </div>
-              </Row>
-              <Row xs="4" className="m-2">
-                {/* Toping 5 */}
-                <div>
-                  <Card.Img style={style.imgToping} src={Toping5} />
-                  <Card.Text style={style.textToping}>
-                    Bill Berry Boba
-                  </Card.Text>
-                </div>
-
-                {/* Toping 6 */}
-                <div>
-                  <Card.Img style={style.imgToping} src={Toping6} />
-                  <Card.Text style={style.textToping}>
-                    Kiwi Popping Pearl
-                  </Card.Text>
-                </div>
-
-                {/* Toping 7 */}
-                <div>
-                  <Card.Img style={style.imgToping} src={Toping7} />
-                  <Card.Text style={style.textToping}>
-                    Matcha Cantaloupe
-                  </Card.Text>
-                </div>
-
-                {/* Toping 8 */}
-                <div>
-                  <Card.Img style={style.imgToping} src={Toping8} />
-                  <Card.Text style={style.textToping}>
-                    Strawberry Popping
-                  </Card.Text>
-                </div>
+                {/* Toping */}
+                {DataToping.map((toping) => (
+                  <div className="p-3">
+                    <div
+                      className="position-relative"
+                      onClick={() => handleChecked(toping.id, toping.price)}
+                    >
+                      <Card.Img
+                        alt=""
+                        style={style.imgToping}
+                        src={toping.imgToping}
+                      />
+                      <Badge
+                        style={{ top: "10%", left: "65%" }}
+                        className="position-absolute translate-middle bg-success p-0   border border-light rounded-circle"
+                      >
+                        {topingCheck.filter(
+                          (Element) => Element === toping.id
+                        )[0] === toping.id ? (
+                          <img alt="" style={{ width: "20px" }} src={Approve} />
+                        ) : (
+                          <></>
+                        )}
+                      </Badge>
+                    </div>
+                    {/* <Card.Img alt="" style={style.imgToping} src={ListToping.order} /> */}
+                    <Card.Text className="m-0" style={style.textToping}>
+                      {toping.nameToping}
+                    </Card.Text>
+                    <Card.Text style={style.textToping}>
+                      {formatIDR.format(toping.price)}
+                    </Card.Text>
+                  </div>
+                ))}
               </Row>
             </div>
             <Row className="m-4">
@@ -147,7 +139,9 @@ function DetailProduct() {
                 <Card.Text style={style.cardText}>Total</Card.Text>
               </Col>
               <Col xs={6} md={2}>
-                <Card.Text style={style.cardText}>Rp.27.000</Card.Text>
+                <Card.Text style={style.cardText}>
+                  {formatIDR.format(DataProduct[id].price + topingPrice)}
+                </Card.Text>
               </Col>
             </Row>
             <Button
@@ -161,7 +155,7 @@ function DetailProduct() {
         </Row>
       </Card>
     </Container>
-  );
+  )
 }
 
-export default DetailProduct;
+export default DetailProduct
