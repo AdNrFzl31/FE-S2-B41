@@ -19,7 +19,7 @@ function App() {
         <Route path="/" element={<Home />} />
         <Route path="/DetailProduct/:id" element={<DetailProduct />} />
         <Route path="/Profile" element={<Profile />} />
-        <Route path="/Income" element={<Income />} />
+        <Route path="/Admin" element={<Income />} />
         <Route path="/Transaction" element={<Transaction />} />
         <Route path="/AddProduct" element={<AddProduct />} />
         <Route path="/AddToping" element={<AddToping />} />

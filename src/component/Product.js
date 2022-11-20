@@ -1,9 +1,6 @@
 import "bootstrap/dist/css/bootstrap.min.css"
 import { Card, Row } from "react-bootstrap"
 import { useNavigate } from "react-router-dom"
-import ListProduct from "./ListProduct"
-
-// import { BrowserRouter as Router, Routes, Route, Link  } from 'react-router-dom';
 
 const style = {
   card: {

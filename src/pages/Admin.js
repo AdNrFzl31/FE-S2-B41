@@ -1,8 +1,8 @@
-import "bootstrap/dist/css/bootstrap.min.css";
-import { Container, Button, Table, Stack } from "react-bootstrap";
-import { Link } from "react-router-dom";
-import Approve from "../assets/image/Approve.png";
-import Cancel from "../assets/image/Cancel.png";
+import "bootstrap/dist/css/bootstrap.min.css"
+import { Container, Button, Table, Stack } from "react-bootstrap"
+import { Link } from "react-router-dom"
+import Approve from "../assets/image/Approve.png"
+import Cancel from "../assets/image/Cancel.png"
 
 const style = {
   textTitle: {
@@ -41,7 +41,7 @@ const style = {
   light: {
     color: "#00D1FF",
   },
-};
+}
 
 function Income() {
   return (
@@ -108,7 +108,7 @@ function Income() {
             </td>
             <td style={style.success}>Success</td>
             <td className="d-flex justify-content-center">
-              <img src={Approve} />
+              <img alt="" src={Approve} style={{ width: "12%" }} />
             </td>
           </tr>
           <tr>
@@ -123,7 +123,7 @@ function Income() {
             </td>
             <td style={style.danger}>Cancel</td>
             <td className="d-flex justify-content-center">
-              <img src={Cancel} />
+              <img alt="" src={Cancel} />
             </td>
           </tr>
           <tr>
@@ -138,13 +138,13 @@ function Income() {
             </td>
             <td style={style.light}>On The Way</td>
             <td className="d-flex justify-content-center">
-              <img src={Approve} />
+              <img alt="" src={Approve} style={{ width: "12%" }} />
             </td>
           </tr>
         </tbody>
       </Table>
     </Container>
-  );
+  )
 }
 
-export default Income;
+export default Income

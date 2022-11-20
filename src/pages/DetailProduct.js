@@ -1,13 +1,8 @@
-import { useState } from "react"
 import "bootstrap/dist/css/bootstrap.min.css"
-import { Button, Card, Col, Container, Row, Badge } from "react-bootstrap"
+import { useState } from "react"
+import { Badge, Button, Card, Col, Container, Row } from "react-bootstrap"
 import { useParams } from "react-router-dom"
 import Approve from "../assets/image/Approve.png"
-import ListProduct from "../component/ListProduct"
-import ListToping from "../component/ListToping"
-import SelectToping from "../component/SelectToping"
-
-// import { BrowserRouter as Router, Routes, Route, Link  } from 'react-router-dom';
 
 const style = {
   card: {

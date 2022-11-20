@@ -51,6 +51,7 @@ const Login = ({ show, onHide, setShowLogin, setShowRegister }) => {
 
   const handleOnSubmit = (e) => {
     e.preventDefault()
+    window.location.reload()
     LoginDataUser.forEach((element) => {
       if (
         dataLogin.email === element.email &&
