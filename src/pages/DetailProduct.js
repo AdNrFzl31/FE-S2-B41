@@ -63,7 +63,7 @@ function DetailProduct() {
   const [topingPrice, setTopingPrice] = useState(0)
 
   const handleChecked = (id, price) => {
-    let filterID = topingCheck.filter((e) => e === id)
+    const filterID = topingCheck.filter((e) => e === id)
     if (filterID[0] !== id) {
       setTopingCheck([...topingCheck, id])
       setTopingPrice(topingPrice + price)
