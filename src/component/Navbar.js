@@ -9,6 +9,7 @@ import {
   OverlayTrigger,
   Popover,
   Stack,
+  Badge,
 } from "react-bootstrap"
 import { useNavigate } from "react-router-dom"
 import AddProduct from "../assets/image/AddProduct.png"
@@ -21,7 +22,7 @@ import Login from "../pages/Login.js"
 import Register from "../pages/Register.js"
 
 function DropdownUser() {
-  const LoginDataUser = JSON.parse(localStorage.getItem("DATA_USER"))
+  const LoginDataUser = JSON.parse(localStorage.getItem("VALUE_LOGIN"))
   let navigate = useNavigate()
   const logout = () => {
     navigate("/")
@@ -185,6 +186,21 @@ function Navs() {
 
   const DataUser = JSON.parse(localStorage.getItem("VALUE_LOGIN"))
 
+  const dataCart = []
+  const getCartData = () => {
+    let Data
+    if (!!DataUser !== false) {
+      Data = JSON.parse(localStorage.getItem(`DATA_CART_${DataUser[0].id}`))
+    }
+
+    if (!!Data !== false) {
+      for (let i = 0; i < Data.length; i++) {
+        dataCart.push(Data[i])
+      }
+    }
+  }
+  getCartData()
+
   return (
     <Navbar collapseOnSelect expand="lg" bg="light" variant="light">
       <Container>
@@ -268,7 +284,7 @@ function Navs() {
                 ) : (
                   // Navbar User
                   <Stack direction="horizontal">
-                    <Nav.Link href="/Cart" className="m-3">
+                    <Nav.Link href="/Cart" className="position-relative m-3">
                       <img
                         alt=""
                         src={Basket}
@@ -276,6 +292,12 @@ function Navs() {
                         height="30"
                         className="d-inline-block align-top"
                       />
+                      <Badge
+                        // style={{ top: "10%", left: "65%" }}
+                        className="position-absolute translate-middle badge-position rounded-pill bg-danger p-1   border border-light rounded-circle"
+                      >
+                        {dataCart.length}
+                      </Badge>
                     </Nav.Link>
                     <DropdownUser />
                   </Stack>

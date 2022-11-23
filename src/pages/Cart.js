@@ -1,4 +1,5 @@
 import React, { useState } from "react"
+import { useLocation, useNavigate } from "react-router-dom"
 import {
   Button,
   Card,
@@ -54,6 +55,7 @@ const style = {
 }
 
 function Cart() {
+  const navigate = useNavigate()
   const [modalShow, setModalShow] = useState(false)
 
   const pay = []
@@ -65,6 +67,7 @@ function Cart() {
     address: "",
   })
   const addDataPay = JSON.parse(localStorage.getItem("DATA_PAY"))
+  const DataCart = JSON.parse(localStorage.getItem("DATA_CART"))
 
   const handleOnChange = (e) => {
     setState({
@@ -101,6 +104,7 @@ function Cart() {
                 <Card.Text style={style.textRed}>Review Your Order</Card.Text>
                 <hr style={style.textRed} className="m-0" />
                 <Stack>
+                  {/* Data pembelian product */}
                   <Card.Body className="pe-0">
                     <Stack direction="horizontal" gap={4}>
                       <Card.Img src={Product1} style={{ width: "20%" }} />
@@ -129,45 +133,6 @@ function Cart() {
                         </Card.Body>
 
                         <Card.Body className=" pe-0  ps-5 ms-5">
-                          <Card.Text style={style.textRed}>Rp.33.000</Card.Text>
-                          <Card.Img
-                            src={Trash}
-                            className="ms-5"
-                            style={{ width: "25%" }}
-                          />
-                        </Card.Body>
-                      </Stack>
-                    </Stack>
-                  </Card.Body>
-
-                  <Card.Body className="pe-0">
-                    <Stack direction="horizontal" gap={4}>
-                      <Card.Img src={Product1} style={{ width: "20%" }} />
-                      <Stack direction="horizontal">
-                        <Card.Body className="ps-0 me-5 w-100">
-                          <Card.Title className="mb-2" style={style.textRed}>
-                            Ice Coffe Palm Sugar
-                          </Card.Title>
-                          <Stack direction="horizontal">
-                            <Card.Text
-                              className="m-0"
-                              style={{
-                                fontSize: "15px",
-                                color: "#974A4A",
-                                fontWeight: "bold",
-                              }}
-                            >
-                              Toping{" "}
-                            </Card.Text>
-                            <Card.Text
-                              style={{ fontSize: "15px", color: "#BD0707" }}
-                            >
-                              : Bill Berry Boba, Bubble Tea Gelatin
-                            </Card.Text>
-                          </Stack>
-                        </Card.Body>
-
-                        <Card.Body className=" pe-0 ps-5 ms-5">
                           <Card.Text style={style.textRed}>Rp.33.000</Card.Text>
                           <Card.Img
                             src={Trash}

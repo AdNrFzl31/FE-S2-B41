@@ -7,6 +7,8 @@ import Product1 from "../assets/image/Product1.png"
 import Profil2 from "../assets/image/Profil2.png"
 
 function Profile() {
+  const DataLogin = JSON.parse(localStorage.getItem("VALUE_LOGIN"))
+
   return (
     <Container className="mb-5">
       <Row className="justify-content-center my-5">
@@ -21,14 +23,14 @@ function Profile() {
             <Card.Img
               alt=""
               style={{ width: "250px", height: "280px" }}
-              src={Profil2}
+              src={DataLogin[0].imgProfil}
             />
             <Col>
               <Card.Body>
                 <Card.Title>Full Name</Card.Title>
-                <Card.Text>Egi Ganteng</Card.Text>
+                <Card.Text>{DataLogin[0].fullname}</Card.Text>
                 <Card.Title>Email</Card.Title>
-                <Card.Text>egigans@gmail.com</Card.Text>
+                <Card.Text>{DataLogin[0].email}</Card.Text>
               </Card.Body>
             </Col>
           </Row>
