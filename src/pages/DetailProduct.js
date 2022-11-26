@@ -74,7 +74,7 @@ function DetailProduct() {
   }
 
   const Topings = []
-  const getToppings = () => {
+  const getTopings = () => {
     if (typeof Storage === "undefined") {
       alert("cant store user")
     }
@@ -98,7 +98,7 @@ function DetailProduct() {
   const [topingPrice, setTopingPrice] = useState(0)
 
   getProduct()
-  getToppings()
+  getTopings()
 
   const handleChecked = (id, price) => {
     const filterID = topingCheck.filter((e) => e === id)

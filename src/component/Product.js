@@ -1,6 +1,9 @@
 import "bootstrap/dist/css/bootstrap.min.css"
+import React, { useState } from "react"
 import { Card, Row } from "react-bootstrap"
 import { useNavigate } from "react-router-dom"
+import Login from "../pages/Login"
+import Register from "../pages/Register"
 
 const style = {
   card: {
@@ -81,14 +84,28 @@ function Products() {
 
 function Product(props) {
   const navigate = useNavigate()
+  const [showLogin, setShowLogin] = useState(false)
+  const [showRegister, setShowRegister] = useState(false)
+
+  const DataUser = JSON.parse(localStorage.getItem("VALUE_LOGIN"))
+  // const handleOnClick = () => {
+  //   if (DataUser === null) {x
+  //     showLogin
+  //   } else {
+  //     navigate(`/DetailProduct/${props.id}`)
+  //   }
+  // }
+
   return (
     <>
       <Card
         border="light"
         style={style.card}
-        onClick={() => {
-          navigate(`/DetailProduct/${props.id}`)
-        }}
+        onClick={() =>
+          DataUser === null
+            ? setShowLogin(true)
+            : navigate(`/DetailProduct/${props.id}`)
+        }
       >
         <Card.Img variant="top" src={props.order} style={style.ImgProduct} />
         <Card.Body>
@@ -96,6 +113,20 @@ function Product(props) {
           <Card.Text style={style.price}>IDR {props.price}</Card.Text>
         </Card.Body>
       </Card>
+
+      <Login
+        show={showLogin}
+        onHide={() => setShowLogin(false)}
+        setShowLogin={setShowLogin}
+        setShowRegister={setShowRegister}
+      />
+
+      <Register
+        show={showRegister}
+        onHide={() => setShowRegister(false)}
+        setShowLogin={setShowLogin}
+        setShowRegister={setShowRegister}
+      />
     </>
   )
 }
