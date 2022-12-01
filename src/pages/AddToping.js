@@ -1,6 +1,8 @@
 import "bootstrap/dist/css/bootstrap.min.css"
 import React, { useState } from "react"
 import { Button, Card, Col, Container, Form, Row } from "react-bootstrap"
+import { useMutation } from "react-query"
+import { API } from "../confiq/api"
 
 // import { BrowserRouter as Router, Routes, Route, Link  } from 'react-router-dom';
 
@@ -38,39 +40,80 @@ const style = {
 }
 
 function AddToping() {
-  const topings = []
-  const [DataToping, setState] = useState({
-    id: 0,
-    nameToping: "",
+  const [preview, setPreview] = useState(null)
+  const [DataToping, setDataToping] = useState({
+    nametoping: "",
     price: 0,
-    imgToping: "",
+    image: "",
   })
-  const addDataToping = JSON.parse(localStorage.getItem("DATA_TOPING"))
 
   const handleOnChange = (e) => {
-    setState({
+    setDataToping({
       ...DataToping,
-      [e.target.name]: e.target.value,
+      [e.target.name]:
+        e.target.type === "file" ? e.target.files : e.target.value,
     })
-  }
 
-  const handleOnSubmit = (e) => {
-    e.preventDefault()
-
-    if (addDataToping === null) {
-      topings.push(DataToping)
-      localStorage.setItem("DATA_TOPING", JSON.stringify(topings))
-    } else {
-      for (let i = 0; i < addDataToping.length; i++) {
-        topings.push(addDataToping[i])
-      }
-      DataToping.id = addDataToping.length
-      DataToping.price = parseInt(DataToping.price)
-      topings.push(DataToping)
-      localStorage.setItem("DATA_TOPING", JSON.stringify(topings))
+    // Create image url for preview
+    if (e.target.type === "file") {
+      let url = URL.createObjectURL(e.target.files[0])
+      setPreview(url)
+      // setPhotoProduct(<p className="txt-black">{url}</p>)
     }
-    document.getElementById("addToping").reset()
   }
+
+  const handleSubmit = useMutation(async (e) => {
+    try {
+      e.preventDefault()
+
+      // Configuration
+      const config = {
+        headers: {
+          "Content-type": "multipart/form-data",
+        },
+      }
+
+      // Store data with FormData as object
+      const formData = new FormData()
+      formData.set("nametoping", DataToping.nametoping)
+      formData.set("price", DataToping.price)
+      formData.set("image", DataToping.image[0], DataToping.image[0].nametoping)
+
+      // Insert product data
+      const response = await API.post("/toping", formData, config)
+      console.log(response)
+
+      // navigate("/add-product")
+    } catch (error) {
+      console.log(error)
+    }
+  })
+
+  // const handleOnChange = (e) => {
+  //   setState({
+  //     ...DataToping,
+  //     [e.target.name]: e.target.value,
+  //   })
+  // }
+  // const addDataToping = JSON.parse(localStorage.getItem("DATA_TOPING"))
+  // const topings = []
+  // const handleOnSubmit = (e) => {
+  //   e.preventDefault()
+
+  //   if (addDataToping === null) {
+  //     topings.push(DataToping)
+  //     localStorage.setItem("DATA_TOPING", JSON.stringify(topings))
+  //   } else {
+  //     for (let i = 0; i < addDataToping.length; i++) {
+  //       topings.push(addDataToping[i])
+  //     }
+  //     DataToping.id = addDataToping.length
+  //     DataToping.price = parseInt(DataToping.price)
+  //     topings.push(DataToping)
+  //     localStorage.setItem("DATA_TOPING", JSON.stringify(topings))
+  //   }
+  //   document.getElementById("addToping").reset()
+  // }
 
   return (
     <Container className="my-5">
@@ -82,15 +125,18 @@ function AddToping() {
                 Toping
               </Card.Title>
               <Form
-                onSubmit={handleOnSubmit}
+                onSubmit={(e) => handleSubmit.mutate(e)}
                 id="addToping"
                 className="m-auto mt-3 d-grid gap-2 w-100"
               >
                 <Form.Group className="mb-3 " controlId="nameProduct">
                   <Form.Control
                     onChange={handleOnChange}
-                    name="nameToping"
-                    style={{ border: "2px solid #BD0707" }}
+                    name="nametoping"
+                    style={{
+                      border: "2px solid #BD0707",
+                      backgroundColor: "#E0C8C840",
+                    }}
                     type="text"
                     placeholder="Name Toping"
                   />
@@ -99,18 +145,24 @@ function AddToping() {
                   <Form.Control
                     onChange={handleOnChange}
                     name="price"
-                    style={{ border: "2px solid #BD0707" }}
-                    type="text"
+                    style={{
+                      border: "2px solid #BD0707",
+                      backgroundColor: "#E0C8C840",
+                    }}
+                    type="number"
                     placeholder="Price"
                   />
                 </Form.Group>
-                <Form.Group className="mb-3" controlId="photoProduct">
+                <Form.Group className="mb-3" controlId="photoToping">
                   <Form.Control
                     onChange={handleOnChange}
-                    name="imgToping"
-                    style={{ border: "2px solid #BD0707" }}
-                    type="text"
-                    placeholder="Photo Product"
+                    name="image"
+                    style={{
+                      border: "2px solid #BD0707",
+                      backgroundColor: "#E0C8C840",
+                    }}
+                    type="file"
+                    placeholder="Photo Toping"
                   />
                 </Form.Group>
                 <Button
@@ -123,11 +175,14 @@ function AddToping() {
               </Form>
             </Card.Body>
           </Col>
-          <Card.Img
-            variant="top"
-            src={DataToping.imgToping}
-            style={style.ImgToping}
-          />
+          {preview && (
+            <Card.Img
+              variant="top"
+              src={preview}
+              alt={preview}
+              style={style.ImgToping}
+            />
+          )}
         </Row>
       </Card>
     </Container>

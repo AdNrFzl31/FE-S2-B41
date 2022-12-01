@@ -1,5 +1,5 @@
 import "bootstrap/dist/css/bootstrap.min.css"
-import React, { useState } from "react"
+import React, { useContext, useEffect, useState } from "react"
 
 import {
   Button,
@@ -12,6 +12,7 @@ import {
   Badge,
 } from "react-bootstrap"
 import { useNavigate } from "react-router-dom"
+import { UserContext } from "../context/UserContext"
 import AddProduct from "../assets/image/AddProduct.png"
 import AddToping from "../assets/image/AddToping.png"
 import Basket from "../assets/image/Basket.png"
@@ -20,14 +21,22 @@ import Logout from "../assets/image/Logout.png"
 import User from "../assets/image/User.png"
 import Login from "../pages/Login.js"
 import Register from "../pages/Register.js"
+import { useQuery } from "react-query"
+import { API } from "../confiq/api"
 
 function DropdownUser() {
-  const LoginDataUser = JSON.parse(localStorage.getItem("VALUE_LOGIN"))
+  // const Loginstate = JSON.parse(localStorage.getItem("VALUE_LOGIN"))
   let navigate = useNavigate()
+
+  const [state, dispatch] = useContext(UserContext)
+  console.log(state.isLogin)
   const logout = () => {
+    dispatch({
+      type: "LOGOUT",
+    })
     navigate("/")
-    localStorage.removeItem("VALUE_LOGIN")
-    window.location.reload()
+    // localStorage.removeItem("VALUE_LOGIN")
+    // window.location.reload()
   }
 
   return (
@@ -80,7 +89,7 @@ function DropdownUser() {
     >
       <img
         alt=""
-        src={LoginDataUser[0].imgProfil}
+        src={Image}
         className="d-inline-block align-top btn p-0 m-auto"
         style={{
           width: "60px",
@@ -95,12 +104,18 @@ function DropdownUser() {
 }
 
 function DropdownAdmin() {
-  const LoginDataUser = JSON.parse(localStorage.getItem("DATA_USER"))
+  // const Loginstate = JSON.parse(localStorage.getItem("DATA_USER"))
   let navigate = useNavigate()
+
+  const [state, dispatch] = useContext(UserContext)
+  console.log(state.isLogin)
   const logout = () => {
+    dispatch({
+      type: "LOGOUT",
+    })
     navigate("/")
-    localStorage.removeItem("VALUE_LOGIN")
-    window.location.reload()
+    // localStorage.removeItem("VALUE_LOGIN")
+    // window.location.reload()
   }
 
   return (
@@ -142,6 +157,38 @@ function DropdownAdmin() {
               />{" "}
               Add Toping
             </Nav.Link>
+            <Nav.Link
+              href="/ProductAdmin"
+              className="mt-4"
+              style={{
+                fontWeight: "600",
+                fontSize: "17px",
+                alignItems: "center",
+              }}
+            >
+              <img
+                alt=""
+                src={AddProduct}
+                style={{ width: "30px", marginRight: "15px" }}
+              />{" "}
+              Product List
+            </Nav.Link>
+            <Nav.Link
+              href="/TopingAdmin"
+              className="mt-4"
+              style={{
+                fontWeight: "600",
+                fontSize: "17px",
+                alignItems: "center",
+              }}
+            >
+              <img
+                alt=""
+                src={AddToping}
+                style={{ width: "30px", marginRight: "15px" }}
+              />{" "}
+              Toping List
+            </Nav.Link>
           </Popover.Body>
           <hr />
           <Popover.Body>
@@ -166,7 +213,7 @@ function DropdownAdmin() {
     >
       <img
         alt=""
-        src={LoginDataUser[0].imgProfil}
+        src={Image}
         className="d-inline-block align-top btn p-0 m-auto "
         style={{
           width: "60px",
@@ -181,31 +228,22 @@ function DropdownAdmin() {
 }
 
 function Navs() {
+  const [state, dispatch] = useContext(UserContext)
+  console.log("ini isi dari", state)
+
   const [showLogin, setShowLogin] = useState(false)
   const [showRegister, setShowRegister] = useState(false)
 
-  const DataUser = JSON.parse(localStorage.getItem("VALUE_LOGIN"))
-
-  const dataCart = []
-  const getCartData = () => {
-    let Data
-    if (!!DataUser !== false) {
-      Data = JSON.parse(localStorage.getItem(`DATA_CART_${DataUser[0].id}`))
-    }
-
-    if (!!Data !== false) {
-      for (let i = 0; i < Data.length; i++) {
-        dataCart.push(Data[i])
-      }
-    }
-  }
-  getCartData()
+  const { data: order } = useQuery("ordersCache", async () => {
+    const response = await API.get("/orders")
+    return response.data.data
+  })
 
   return (
     <Navbar collapseOnSelect expand="lg" bg="light" variant="light">
       <Container>
         <Navbar.Brand href="#home">
-          {DataUser === null ? (
+          {state.isLogin === false ? (
             <Nav.Link href="/">
               <img
                 alt=""
@@ -215,7 +253,7 @@ function Navs() {
                 className="d-inline-block align-top"
               />
             </Nav.Link>
-          ) : DataUser[0].role === "admin" ? (
+          ) : state.user.role === "admin" ? (
             <Nav.Link href="/Admin">
               <img
                 alt=""
@@ -244,7 +282,7 @@ function Navs() {
         >
           <Nav className="me-auto"></Nav>
           <Nav>
-            {DataUser === null ? (
+            {state.isLogin === false ? (
               <>
                 <Button
                   className="px-5 me-4"
@@ -278,13 +316,13 @@ function Navs() {
               </>
             ) : (
               <>
-                {DataUser[0].role === "admin" ? (
+                {state.user.role === "admin" ? (
                   // Navbar Admin
                   <DropdownAdmin />
                 ) : (
                   // Navbar User
                   <Stack direction="horizontal">
-                    <Nav.Link href="/Cart" className="position-relative m-3">
+                    <Nav.Link href="/Carts" className="position-relative m-3">
                       <img
                         alt=""
                         src={Basket}
@@ -292,14 +330,18 @@ function Navs() {
                         height="30"
                         className="d-inline-block align-top"
                       />
-                      <Badge
-                        // style={{ top: "10%", left: "65%" }}
-                        className="position-absolute translate-middle badge-position rounded-pill bg-danger p-1   border border-light rounded-circle"
-                      >
-                        {dataCart.length}
-                      </Badge>
+                      {order?.length >= 1 && (
+                        <Badge
+                          // style={{ top: "10%", left: "65%" }}
+                          className="position-absolute translate-middle badge-position rounded-pill bg-danger p-1   border border-light rounded-circle"
+                        >
+                          {order?.length}
+                        </Badge>
+                      )}
                     </Nav.Link>
-                    <DropdownUser />
+                    <DropdownUser
+                    // userDropdown={userDropdown} logOut={logOut}
+                    />
                   </Stack>
                 )}
               </>

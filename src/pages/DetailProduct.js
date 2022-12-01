@@ -51,8 +51,8 @@ const style = {
 function DetailProduct() {
   const navigate = useNavigate()
 
-  const getProductURL = useLocation()
-  const getProductId = parseInt(getProductURL.pathname.replace(/\D/g, ""))
+  // const getProductURL = useLocation()
+  // const getProductId = parseInt(getProductURL.pathname.replace(/\D/g, ""))
 
   const DataLogin = JSON.parse(localStorage.getItem("VALUE_LOGIN"))
 
@@ -66,9 +66,9 @@ function DetailProduct() {
 
     if (DataProduct !== null) {
       for (let i = 0; i < DataProduct.length; i++) {
-        if (DataProduct[i].id === getProductId) {
-          Product.push(DataProduct[i])
-        }
+        Product.push(DataProduct[i])
+        // if (DataProduct[i].id === getProductId) {
+        // }
       }
     }
   }

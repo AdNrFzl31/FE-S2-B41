@@ -1,7 +1,8 @@
 import "bootstrap/dist/css/bootstrap.min.css"
 import React, { useState } from "react"
 import { Button, Card, Col, Container, Form, Row } from "react-bootstrap"
-import { useMutation } from "react-query"
+import { useNavigate, useParams } from "react-router"
+import { useMutation, useQuery } from "react-query"
 import { API } from "../confiq/api"
 
 // import { BrowserRouter as Router, Routes, Route, Link  } from 'react-router-dom';
@@ -48,22 +49,31 @@ const style = {
   },
 }
 
-function AddProduct() {
-  // const [popUp, setPopUp] = React.useState(false)
-  // const [photoProduct, setPhotoProduct] = React.useState(<p>Image Product</p>)
+function UpdateProduct() {
+  const title = "Product admin"
+  document.title = "WaysBucks | " + title
+
+  const navigate = useNavigate()
+  const { id } = useParams()
+
   const [preview, setPreview] = useState(null)
+  const [product, setProduct] = useState({})
   const [DataProduct, setDataProduct] = useState({
     nameproduct: "",
     price: 0,
     image: "",
   })
 
-  // const handleOnChange = (e) => {
-  //   setState({
-  //     ...DataProduct,
-  //     [e.target.name]: e.target.value,
-  //   })
-  // }
+  // Fetching detail product data by id from database
+  let { productRefetch } = useQuery("updateproductCache", async () => {
+    const response = await API.get("/product/" + id)
+    setDataProduct({
+      nameproduct: response.data.nameproduct,
+      price: response.data.price,
+      image: response.data.image,
+    })
+    setProduct(response.data)
+  })
 
   const handleOnChange = (e) => {
     setDataProduct({
@@ -84,52 +94,31 @@ function AddProduct() {
     try {
       e.preventDefault()
 
-      // Configuration
-      const config = {
-        headers: {
-          "Content-type": "multipart/form-data",
-        },
-      }
-
       // Store data with FormData as object
       const formData = new FormData()
+      if (preview) {
+        formData.set("image", preview[0], preview[0]?.nameproduct)
+      }
       formData.set("nameproduct", DataProduct.nameproduct)
       formData.set("price", DataProduct.price)
-      formData.set(
-        "image",
-        DataProduct.image[0],
-        DataProduct.image[0].nameproduct
-      )
+
+      // Configuration
+      const config = {
+        method: "PATCH",
+        headers: {
+          Authorization: "Basic " + localStorage.token,
+        },
+        body: formData,
+      }
 
       // Insert product data
-      const response = await API.post("/product", formData, config)
-      console.log(response)
+      const response = await API.patch("/product/" + product.id, config)
 
-      // navigate("/add-product")
+      navigate("/ProductAdmin")
     } catch (error) {
       console.log(error)
     }
   })
-
-  // const products = []
-  // const addDataProduct = JSON.parse(localStorage.getItem("DATA_PRODUCT"))
-  // const handleOnSubmit = (e) => {
-  //   e.preventDefault()
-
-  //   if (addDataProduct === null) {
-  //     products.push(DataProduct)
-  //     localStorage.setItem("DATA_PRODUCT", JSON.stringify(products))
-  //   } else {
-  //     for (let i = 0; i < addDataProduct.length; i++) {
-  //       products.push(addDataProduct[i])
-  //     }
-  //     DataProduct.id = addDataProduct.length
-  //     DataProduct.price = parseInt(DataProduct.price)
-  //     products.push(DataProduct)
-  //     localStorage.setItem("DATA_PRODUCT", JSON.stringify(products))
-  //   }
-  //   document.getElementById("addProduct").reset()
-  // }
 
   return (
     <Container className="my-5">
@@ -142,13 +131,14 @@ function AddProduct() {
               </Card.Title>
               <Form
                 onSubmit={(e) => handleSubmit.mutate(e)}
-                id="addProduct"
+                id="UpdateProduct"
                 className="m-auto mt-3 d-grid gap-2 w-100"
               >
                 <Form.Group className="mb-3 " controlId="nameProduct">
                   <Form.Control
                     onChange={handleOnChange}
                     name="nameproduct"
+                    value={DataProduct.nameproduct}
                     style={{
                       border: "2px solid #BD0707",
                       backgroundColor: "#E0C8C840",
@@ -161,6 +151,7 @@ function AddProduct() {
                   <Form.Control
                     onChange={handleOnChange}
                     name="price"
+                    value={DataProduct.price}
                     style={{
                       border: "2px solid #BD0707",
                       backgroundColor: "#E0C8C840",
@@ -173,6 +164,7 @@ function AddProduct() {
                   <Form.Control
                     onChange={handleOnChange}
                     name="image"
+                    value={DataProduct.image}
                     style={{
                       border: "2px solid #BD0707",
                       backgroundColor: "#E0C8C840",
@@ -192,28 +184,25 @@ function AddProduct() {
               </Form>
             </Card.Body>
           </Col>
-          {preview && (
+          {!preview ? (
             <Card.Img
               variant="top"
-              src={preview}
-              alt={preview}
+              src={DataProduct.image}
+              alt=""
+              style={style.ImgProduct}
+            />
+          ) : (
+            <Card.Img
+              variant="top"
+              src={URL.createObjectURL(preview[0])}
+              alt=""
               style={style.ImgProduct}
             />
           )}
-          {/* {popUp && (
-            <section
-              className="modal fixed z-index-3 w100 h100 flex jc-center ai-center"
-              onClick={() => setPopUp(false)}
-            >
-              <div className="notification-background">
-                <h5>Product Has Been Added Successfully</h5>
-              </div>
-            </section>
-          )} */}
         </Row>
       </Card>
     </Container>
   )
 }
 
-export default AddProduct
+export default UpdateProduct

@@ -2,7 +2,9 @@ import "bootstrap/dist/css/bootstrap.min.css"
 import { Container } from "react-bootstrap"
 import Jumbotron from "../component/Jumbotron"
 import Products from "../component/Product"
-import Income from "./Admin"
+import Navs from "../component/Navbar.js"
+
+// import Income from "./Admin"
 // import { BrowserRouter as Router, Routes, Route, Link  } from 'react-router-dom';
 
 const style = {
@@ -11,34 +13,17 @@ const style = {
   },
 }
 function Home() {
-  const DataUser = JSON.parse(localStorage.getItem("VALUE_LOGIN"))
+  // const DataUser = JSON.parse(localStorage.getItem("VALUE_LOGIN"))
 
-  if (DataUser === null) {
-    return (
-      <Container className="my-5 w-90">
-        <Jumbotron />
-        <h3 style={style.text} className="my-5">
-          Let's Order
-        </h3>
-        <Products />
-      </Container>
-    )
-  } else {
-    return DataUser[0].role === "admin" ? (
-      <Container className="my-5 w-90">
-        <Jumbotron />
-        <Income />
-      </Container>
-    ) : (
-      <Container className="my-5 w-90">
-        <Jumbotron />
-        <h3 style={style.text} className="my-5">
-          Let's Order
-        </h3>
-        <Products />
-      </Container>
-    )
-  }
+  return (
+    <Container className="my-5 w-90">
+      <Jumbotron />
+      <h3 style={style.text} className="my-5">
+        Let's Order
+      </h3>
+      <Products />
+    </Container>
+  )
 }
 
 export default Home

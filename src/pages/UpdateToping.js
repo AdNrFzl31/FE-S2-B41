@@ -1,7 +1,8 @@
 import "bootstrap/dist/css/bootstrap.min.css"
 import React, { useState } from "react"
 import { Button, Card, Col, Container, Form, Row } from "react-bootstrap"
-import { useMutation } from "react-query"
+import { useNavigate, useParams } from "react-router"
+import { useMutation, useQuery } from "react-query"
 import { API } from "../confiq/api"
 
 // import { BrowserRouter as Router, Routes, Route, Link  } from 'react-router-dom';
@@ -33,12 +34,12 @@ const style = {
     color: "black",
   },
 
-  ImgProduct: {
+  ImgToping: {
     position: "relative",
     width: "350px",
   },
 
-  // Image Product 1
+  // Image Toping 1
   ImgLogo: {
     position: "absolute",
     width: "130px",
@@ -48,26 +49,35 @@ const style = {
   },
 }
 
-function AddProduct() {
-  // const [popUp, setPopUp] = React.useState(false)
-  // const [photoProduct, setPhotoProduct] = React.useState(<p>Image Product</p>)
+function UpdateToping() {
+  const title = "Toping admin"
+  document.title = "WaysBucks | " + title
+
+  const navigate = useNavigate()
+  const { id } = useParams()
+
   const [preview, setPreview] = useState(null)
-  const [DataProduct, setDataProduct] = useState({
-    nameproduct: "",
+  const [toping, setToping] = useState({})
+  const [DataToping, setDataToping] = useState({
+    nametoping: "",
     price: 0,
     image: "",
   })
 
-  // const handleOnChange = (e) => {
-  //   setState({
-  //     ...DataProduct,
-  //     [e.target.name]: e.target.value,
-  //   })
-  // }
+  // Fetching detail toping data by id from database
+  let { topingRefetch } = useQuery("updateTopingCache", async () => {
+    const response = await API.get("/toping/" + id)
+    setDataToping({
+      nametoping: response.data.nametoping,
+      price: response.data.price,
+      image: response.data.image,
+    })
+    setToping(response.data)
+  })
 
   const handleOnChange = (e) => {
-    setDataProduct({
-      ...DataProduct,
+    setDataToping({
+      ...DataToping,
       [e.target.name]:
         e.target.type === "file" ? e.target.files : e.target.value,
     })
@@ -76,7 +86,7 @@ function AddProduct() {
     if (e.target.type === "file") {
       let url = URL.createObjectURL(e.target.files[0])
       setPreview(url)
-      // setPhotoProduct(<p className="txt-black">{url}</p>)
+      // setPhotoToping(<p className="txt-black">{url}</p>)
     }
   }
 
@@ -84,52 +94,31 @@ function AddProduct() {
     try {
       e.preventDefault()
 
-      // Configuration
-      const config = {
-        headers: {
-          "Content-type": "multipart/form-data",
-        },
-      }
-
       // Store data with FormData as object
       const formData = new FormData()
-      formData.set("nameproduct", DataProduct.nameproduct)
-      formData.set("price", DataProduct.price)
-      formData.set(
-        "image",
-        DataProduct.image[0],
-        DataProduct.image[0].nameproduct
-      )
+      if (preview) {
+        formData.set("image", preview[0], preview[0]?.nametoping)
+      }
+      formData.set("nametoping", DataToping.nametoping)
+      formData.set("price", DataToping.price)
 
-      // Insert product data
-      const response = await API.post("/product", formData, config)
-      console.log(response)
+      // Configuration
+      const config = {
+        method: "PATCH",
+        headers: {
+          Authorization: "Basic " + localStorage.token,
+        },
+        body: formData,
+      }
 
-      // navigate("/add-product")
+      // Insert toping data
+      const response = await API.patch("/toping/" + toping.id, config)
+
+      navigate("/TopingAdmin")
     } catch (error) {
       console.log(error)
     }
   })
-
-  // const products = []
-  // const addDataProduct = JSON.parse(localStorage.getItem("DATA_PRODUCT"))
-  // const handleOnSubmit = (e) => {
-  //   e.preventDefault()
-
-  //   if (addDataProduct === null) {
-  //     products.push(DataProduct)
-  //     localStorage.setItem("DATA_PRODUCT", JSON.stringify(products))
-  //   } else {
-  //     for (let i = 0; i < addDataProduct.length; i++) {
-  //       products.push(addDataProduct[i])
-  //     }
-  //     DataProduct.id = addDataProduct.length
-  //     DataProduct.price = parseInt(DataProduct.price)
-  //     products.push(DataProduct)
-  //     localStorage.setItem("DATA_PRODUCT", JSON.stringify(products))
-  //   }
-  //   document.getElementById("addProduct").reset()
-  // }
 
   return (
     <Container className="my-5">
@@ -138,29 +127,31 @@ function AddProduct() {
           <Col sm={8}>
             <Card.Body className="m-auto" style={{ width: "80%" }}>
               <Card.Title className="mb-5" style={style.textTitle}>
-                Product
+                Toping
               </Card.Title>
               <Form
                 onSubmit={(e) => handleSubmit.mutate(e)}
-                id="addProduct"
+                id="UpdateToping"
                 className="m-auto mt-3 d-grid gap-2 w-100"
               >
-                <Form.Group className="mb-3 " controlId="nameProduct">
+                <Form.Group className="mb-3 " controlId="nameToping">
                   <Form.Control
                     onChange={handleOnChange}
-                    name="nameproduct"
+                    name="nametoping"
+                    value={DataToping.nametoping}
                     style={{
                       border: "2px solid #BD0707",
                       backgroundColor: "#E0C8C840",
                     }}
                     type="text"
-                    placeholder="Name Product"
+                    placeholder="Name Toping"
                   />
                 </Form.Group>
                 <Form.Group className="mb-3" controlId="price">
                   <Form.Control
                     onChange={handleOnChange}
                     name="price"
+                    value={DataToping.price}
                     style={{
                       border: "2px solid #BD0707",
                       backgroundColor: "#E0C8C840",
@@ -169,16 +160,17 @@ function AddProduct() {
                     placeholder="Price"
                   />
                 </Form.Group>
-                <Form.Group className="mb-3" controlId="imgProduct">
+                <Form.Group className="mb-3" controlId="imgToping">
                   <Form.Control
                     onChange={handleOnChange}
                     name="image"
+                    value={DataToping.image}
                     style={{
                       border: "2px solid #BD0707",
                       backgroundColor: "#E0C8C840",
                     }}
                     type="file"
-                    placeholder="Photo Product"
+                    placeholder="Photo Toping"
                   />
                 </Form.Group>
                 <Button
@@ -187,33 +179,30 @@ function AddProduct() {
                   type="submit"
                   // onClick={() => setPopUp(true)}
                 >
-                  Add Product
+                  Add Toping
                 </Button>
               </Form>
             </Card.Body>
           </Col>
-          {preview && (
+          {!preview ? (
             <Card.Img
               variant="top"
-              src={preview}
-              alt={preview}
-              style={style.ImgProduct}
+              src={DataToping.image}
+              alt=""
+              style={style.ImgToping}
+            />
+          ) : (
+            <Card.Img
+              variant="top"
+              src={URL.createObjectURL(preview[0])}
+              alt=""
+              style={style.ImgToping}
             />
           )}
-          {/* {popUp && (
-            <section
-              className="modal fixed z-index-3 w100 h100 flex jc-center ai-center"
-              onClick={() => setPopUp(false)}
-            >
-              <div className="notification-background">
-                <h5>Product Has Been Added Successfully</h5>
-              </div>
-            </section>
-          )} */}
         </Row>
       </Card>
     </Container>
   )
 }
 
-export default AddProduct
+export default UpdateToping

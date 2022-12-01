@@ -3,6 +3,7 @@ import { Container, Button, Table, Stack } from "react-bootstrap"
 import { Link } from "react-router-dom"
 import Approve from "../assets/image/Approve.png"
 import Cancel from "../assets/image/Cancel.png"
+import Jumbotron from "../component/Jumbotron"
 
 const style = {
   textTitle: {
@@ -46,7 +47,8 @@ const style = {
 function Income() {
   return (
     <Container className="mt-5">
-      <h3 style={style.textTitle} className="mb-5">
+      <Jumbotron />
+      <h3 style={style.textTitle} className="my-5">
         Income transaction
       </h3>
       <Table bordered hover>
