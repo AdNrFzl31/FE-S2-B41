@@ -117,11 +117,11 @@ function DetailProduct() {
     }
   })
 
-  useEffect(() => {
-    if (state.isLogin === false || state.user.role === "admin") {
-      navigate("/")
-    }
-  }, [state])
+  // useEffect(() => {
+  //   if (state.isLogin === false || state.user.role === "admin") {
+  //     navigate("/")
+  //   }
+  // }, [state])
 
   return (
     <Container className="my-5">

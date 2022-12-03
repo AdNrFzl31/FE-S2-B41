@@ -214,13 +214,6 @@ function UpdateProduct() {
               alt=""
               style={style.ImgProduct}
             />
-            // ) : (
-            //   <Card.Img
-            //     variant="top"
-            //     src={URL.createObjectURL(preview[0])}
-            //     alt=""
-            //     style={style.ImgProduct}
-            //   />
           )}
         </Row>
       </Card>

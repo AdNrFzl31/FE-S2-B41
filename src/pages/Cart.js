@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from "react"
-import { useNavigate } from "react-router-dom"
+import { useNavigate, useParams } from "react-router-dom"
 import {
   Button,
   Card,
@@ -63,19 +63,7 @@ const style = {
 }
 
 function Cart() {
-  let navigate = useNavigate()
-
-  const [showLogin, setShowLogin] = useState(true)
-  const [showRegister, setShowRegister] = useState(false)
-  const [modalShow, setModalShow] = useState(false)
-
   const [state] = useContext(UserContext)
-
-  const formatIDR = new Intl.NumberFormat(undefined, {
-    style: "currency",
-    currency: "IDR",
-    maximumFractionDigits: 0,
-  })
 
   let { data: order, refetch } = useQuery("ordersCache", async () => {
     const response = await API.get("/orders")
@@ -83,6 +71,20 @@ function Cart() {
   })
   console.log("data order: ", order)
 
+  let Subtotal = 0
+  let Qty = 0
+  let IDTrans = 0
+  if (state.isLogin === true) {
+    order?.map(
+      (element) => (
+        (Subtotal += element.subtotal),
+        (Qty += element.qty),
+        (IDTrans = element.transaction_id)
+      )
+    )
+  }
+
+  //Payment
   const [DataPay, setState] = useState({
     name: "",
     email: "",
@@ -91,12 +93,46 @@ function Cart() {
     address: "",
   })
 
+  // const { name, address } = form
+
   const handleOnChange = (e) => {
     setState({
       ...DataPay,
       [e.target.name]: e.target.value,
     })
   }
+
+  let navigate = useNavigate()
+  const HandlePay = useMutation(async (id) => {
+    try {
+      const config = {
+        headers: {
+          "Content-type": "application/json",
+        },
+      }
+      const requestBody = JSON.stringify(DataPay)
+      const response = await API.patch(
+        "/transaction/" + id,
+        requestBody,
+        config
+      )
+      // refetch()
+      // navigate("/")
+      console.log("Transaksi", response)
+    } catch (error) {
+      console.log(error)
+    }
+  })
+
+  const formatIDR = new Intl.NumberFormat(undefined, {
+    style: "currency",
+    currency: "IDR",
+    maximumFractionDigits: 0,
+  })
+
+  const [showLogin, setShowLogin] = useState(true)
+  const [showRegister, setShowRegister] = useState(false)
+  const [modalShow, setModalShow] = useState(false)
 
   //Delete order
   const [idDelete, setIdDelete] = useState(null)
@@ -266,19 +302,13 @@ function Cart() {
                               style={style.textRed}
                               className="text-end"
                             >
-                              {/* {!!dataCart === false || dataCart.length === 0
-                              ? 0
-                              : formatIDR.format(
-                                  dataCart
-                                    .map((e) => e.total)
-                                    .reduce((a, b) => a + b)
-                                )} */}
+                              {formatIDR.format(Subtotal)}
                             </Card.Text>
                             <Card.Text
                               style={style.textRed}
                               className="text-end"
                             >
-                              {/* {dataCart.length} */}
+                              {Qty}
                             </Card.Text>
                           </Card.Body>
                         </Stack>
@@ -292,13 +322,7 @@ function Cart() {
                               style={style.textRed}
                               className="text-end"
                             >
-                              {/* {!!dataCart === false || dataCart.length === 0
-                              ? 0
-                              : formatIDR.format(
-                                  dataCart
-                                    .map((e) => e.total)
-                                    .reduce((a, b) => a + b)
-                                )} */}
+                              {formatIDR.format(Subtotal)}
                             </Card.Text>
                           </Card.Body>
                         </Stack>
@@ -336,7 +360,7 @@ function Cart() {
                 </Col>
                 <Col sm={4} className="pt-5">
                   <Form
-                    // onSubmit={handleOnSubmit}
+                    onSubmit={() => HandlePay.mutate(IDTrans)}
                     className="m-auto mt-3 d-grid gap-4 w-100"
                   >
                     <Form.Group className="mb-3 " controlId="name">
@@ -367,7 +391,7 @@ function Cart() {
                         // value={DataPay.phone}
                         name="phone"
                         style={{ border: "2px solid #BD0707" }}
-                        type="number"
+                        type="text"
                         placeholder="Phone"
                       />
                     </Form.Group>
@@ -378,7 +402,7 @@ function Cart() {
                         // value={DataPay.posCode}
                         name="posCode"
                         style={{ border: "2px solid #BD0707" }}
-                        type="number"
+                        type="text"
                         placeholder="Pos Code"
                       />
                     </Form.Group>
@@ -410,7 +434,7 @@ function Cart() {
                         style={{ backgroundColor: "#BD0707" }}
                         type="submit"
                       >
-                        Pay
+                        Pay {IDTrans}
                       </Button>
 
                       <ModalPopUp
