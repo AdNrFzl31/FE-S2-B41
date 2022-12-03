@@ -1,5 +1,5 @@
 import "bootstrap/dist/css/bootstrap.min.css"
-import React, { useState } from "react"
+import React, { useEffect, useState } from "react"
 import { Button, Card, Col, Container, Form, Row } from "react-bootstrap"
 import { useNavigate, useParams } from "react-router"
 import { useMutation, useQuery } from "react-query"
@@ -65,15 +65,28 @@ function UpdateToping() {
   })
 
   // Fetching detail toping data by id from database
-  let { topingRefetch } = useQuery("updateTopingCache", async () => {
+  let { data: topings } = useQuery("updateTopingCache", async () => {
     const response = await API.get("/toping/" + id)
-    setDataToping({
-      nametoping: response.data.nametoping,
-      price: response.data.price,
-      image: response.data.image,
-    })
-    setToping(response.data)
+    return response.data.data
+    // setDataToping({
+    //   nametoping: response.data.nametoping,
+    //   price: response.data.price,
+    //   image: response.data.image,
+    // })
+    // setToping(response.data)
   })
+
+  useEffect(() => {
+    if (topings) {
+      setPreview(topings.image)
+      setDataToping({
+        ...DataToping,
+        nametoping: topings.nametoping,
+        price: topings.price,
+      })
+      setToping(topings)
+    }
+  }, [topings])
 
   const handleOnChange = (e) => {
     setDataToping({
@@ -94,25 +107,34 @@ function UpdateToping() {
     try {
       e.preventDefault()
 
+      // Configuration
+      const config = {
+        // method: "PATCH",
+        headers: {
+          "Content-type": "multipart/form-data",
+          // Authorization: "Basic " + localStorage.token,
+        },
+      }
+
       // Store data with FormData as object
       const formData = new FormData()
-      if (preview) {
-        formData.set("image", preview[0], preview[0]?.nametoping)
+      if (DataToping.image) {
+        formData.set(
+          "image",
+          DataToping.image[0],
+          DataToping.image[0]?.nametoping
+        )
       }
       formData.set("nametoping", DataToping.nametoping)
       formData.set("price", DataToping.price)
 
-      // Configuration
-      const config = {
-        method: "PATCH",
-        headers: {
-          Authorization: "Basic " + localStorage.token,
-        },
-        body: formData,
-      }
-
       // Insert toping data
-      const response = await API.patch("/toping/" + toping.id, config)
+      const response = await API.patch(
+        "/toping/" + topings.id,
+        formData,
+        config
+      )
+      console.log(response.data)
 
       navigate("/TopingAdmin")
     } catch (error) {
@@ -138,7 +160,7 @@ function UpdateToping() {
                   <Form.Control
                     onChange={handleOnChange}
                     name="nametoping"
-                    value={DataToping.nametoping}
+                    value={DataToping?.nametoping}
                     style={{
                       border: "2px solid #BD0707",
                       backgroundColor: "#E0C8C840",
@@ -151,7 +173,7 @@ function UpdateToping() {
                   <Form.Control
                     onChange={handleOnChange}
                     name="price"
-                    value={DataToping.price}
+                    value={DataToping?.price}
                     style={{
                       border: "2px solid #BD0707",
                       backgroundColor: "#E0C8C840",
@@ -164,7 +186,7 @@ function UpdateToping() {
                   <Form.Control
                     onChange={handleOnChange}
                     name="image"
-                    value={DataToping.image}
+                    // value={DataToping?.image}
                     style={{
                       border: "2px solid #BD0707",
                       backgroundColor: "#E0C8C840",
@@ -184,20 +206,20 @@ function UpdateToping() {
               </Form>
             </Card.Body>
           </Col>
-          {!preview ? (
+          {preview && (
             <Card.Img
               variant="top"
-              src={DataToping.image}
+              src={preview}
               alt=""
               style={style.ImgToping}
             />
-          ) : (
-            <Card.Img
-              variant="top"
-              src={URL.createObjectURL(preview[0])}
-              alt=""
-              style={style.ImgToping}
-            />
+            // ) : (
+            //   <Card.Img
+            //     variant="top"
+            //     src={URL.createObjectURL(preview[0])}
+            //     alt=""
+            //     style={style.ImgToping}
+            //   />
           )}
         </Row>
       </Card>

@@ -2,6 +2,7 @@ import "bootstrap/dist/css/bootstrap.min.css"
 import React, { useState } from "react"
 import { Button, Card, Col, Container, Form, Row } from "react-bootstrap"
 import { useMutation } from "react-query"
+import ModalPopUpToping from "../component/PopUpToping"
 import { API } from "../confiq/api"
 
 // import { BrowserRouter as Router, Routes, Route, Link  } from 'react-router-dom';
@@ -89,103 +90,85 @@ function AddToping() {
     }
   })
 
-  // const handleOnChange = (e) => {
-  //   setState({
-  //     ...DataToping,
-  //     [e.target.name]: e.target.value,
-  //   })
-  // }
-  // const addDataToping = JSON.parse(localStorage.getItem("DATA_TOPING"))
-  // const topings = []
-  // const handleOnSubmit = (e) => {
-  //   e.preventDefault()
-
-  //   if (addDataToping === null) {
-  //     topings.push(DataToping)
-  //     localStorage.setItem("DATA_TOPING", JSON.stringify(topings))
-  //   } else {
-  //     for (let i = 0; i < addDataToping.length; i++) {
-  //       topings.push(addDataToping[i])
-  //     }
-  //     DataToping.id = addDataToping.length
-  //     DataToping.price = parseInt(DataToping.price)
-  //     topings.push(DataToping)
-  //     localStorage.setItem("DATA_TOPING", JSON.stringify(topings))
-  //   }
-  //   document.getElementById("addToping").reset()
-  // }
+  const [modalShow, setModalShow] = useState(false)
 
   return (
-    <Container className="my-5">
-      <Card className="mt-5" style={{ border: "white" }}>
-        <Row>
-          <Col sm={8}>
-            <Card.Body className="m-auto" style={{ width: "80%" }}>
-              <Card.Title className="mb-5" style={style.textTitle}>
-                Toping
-              </Card.Title>
-              <Form
-                onSubmit={(e) => handleSubmit.mutate(e)}
-                id="addToping"
-                className="m-auto mt-3 d-grid gap-2 w-100"
-              >
-                <Form.Group className="mb-3 " controlId="nameProduct">
-                  <Form.Control
-                    onChange={handleOnChange}
-                    name="nametoping"
-                    style={{
-                      border: "2px solid #BD0707",
-                      backgroundColor: "#E0C8C840",
-                    }}
-                    type="text"
-                    placeholder="Name Toping"
-                  />
-                </Form.Group>
-                <Form.Group className="mb-3" controlId="price">
-                  <Form.Control
-                    onChange={handleOnChange}
-                    name="price"
-                    style={{
-                      border: "2px solid #BD0707",
-                      backgroundColor: "#E0C8C840",
-                    }}
-                    type="number"
-                    placeholder="Price"
-                  />
-                </Form.Group>
-                <Form.Group className="mb-3" controlId="photoToping">
-                  <Form.Control
-                    onChange={handleOnChange}
-                    name="image"
-                    style={{
-                      border: "2px solid #BD0707",
-                      backgroundColor: "#E0C8C840",
-                    }}
-                    type="file"
-                    placeholder="Photo Toping"
-                  />
-                </Form.Group>
-                <Button
-                  variant="outline-light"
-                  style={style.bgColor}
-                  type="submit"
+    <>
+      <Container className="my-5">
+        <Card className="mt-5" style={{ border: "white" }}>
+          <Row>
+            <Col sm={8}>
+              <Card.Body className="m-auto" style={{ width: "80%" }}>
+                <Card.Title className="mb-5" style={style.textTitle}>
+                  Toping
+                </Card.Title>
+                <Form
+                  onSubmit={(e) => handleSubmit.mutate(e)}
+                  id="addToping"
+                  className="m-auto mt-3 d-grid gap-2 w-100"
                 >
-                  Add Toping
-                </Button>
-              </Form>
-            </Card.Body>
-          </Col>
-          {preview && (
-            <Card.Img
-              variant="top"
-              src={preview}
-              alt={preview}
-              style={style.ImgToping}
-            />
-          )}
-        </Row>
-      </Card>
-    </Container>
+                  <Form.Group className="mb-3 " controlId="nameProduct">
+                    <Form.Control
+                      onChange={handleOnChange}
+                      name="nametoping"
+                      style={{
+                        border: "2px solid #BD0707",
+                        backgroundColor: "#E0C8C840",
+                      }}
+                      type="text"
+                      placeholder="Name Toping"
+                    />
+                  </Form.Group>
+                  <Form.Group className="mb-3" controlId="price">
+                    <Form.Control
+                      onChange={handleOnChange}
+                      name="price"
+                      style={{
+                        border: "2px solid #BD0707",
+                        backgroundColor: "#E0C8C840",
+                      }}
+                      type="number"
+                      placeholder="Price"
+                    />
+                  </Form.Group>
+                  <Form.Group className="mb-3" controlId="photoToping">
+                    <Form.Control
+                      onChange={handleOnChange}
+                      name="image"
+                      style={{
+                        border: "2px solid #BD0707",
+                        backgroundColor: "#E0C8C840",
+                      }}
+                      type="file"
+                      placeholder="Photo Toping"
+                    />
+                  </Form.Group>
+                  <Button
+                    variant="outline-light"
+                    style={style.bgColor}
+                    type="submit"
+                    onClick={() => {
+                      setModalShow(true)
+                    }}
+                  >
+                    Add Toping
+                  </Button>
+                </Form>
+              </Card.Body>
+            </Col>
+            {preview && (
+              <Card.Img
+                variant="top"
+                src={preview}
+                alt={preview}
+                style={style.ImgToping}
+              />
+            )}
+          </Row>
+        </Card>
+      </Container>
+      <ModalPopUpToping show={modalShow} onHide={() => setModalShow(false)} />
+    </>
   )
 }
 

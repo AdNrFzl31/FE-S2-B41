@@ -79,11 +79,11 @@ function Products() {
   const [showLogin, setShowLogin] = useState(false)
   const [showRegister, setShowRegister] = useState(false)
 
-  const { data: products } = useQuery("productsCache", async () => {
+  const { data: products = [] } = useQuery("productsCache", async () => {
     const res = await API.get("/products")
     return res.data.data
   })
-  console.log("data product : ", products)
+  console.log("data product home : ", products)
 
   return (
     <Row className="d-flex gap-4 justify-content-center">

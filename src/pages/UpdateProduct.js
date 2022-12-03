@@ -1,5 +1,5 @@
 import "bootstrap/dist/css/bootstrap.min.css"
-import React, { useState } from "react"
+import React, { useEffect, useState } from "react"
 import { Button, Card, Col, Container, Form, Row } from "react-bootstrap"
 import { useNavigate, useParams } from "react-router"
 import { useMutation, useQuery } from "react-query"
@@ -65,15 +65,29 @@ function UpdateProduct() {
   })
 
   // Fetching detail product data by id from database
-  let { productRefetch } = useQuery("updateproductCache", async () => {
+  let { data: products } = useQuery("updateproductCache", async () => {
     const response = await API.get("/product/" + id)
-    setDataProduct({
-      nameproduct: response.data.nameproduct,
-      price: response.data.price,
-      image: response.data.image,
-    })
-    setProduct(response.data)
+    return response.data.data
+    // setDataProduct({
+    //   nameproduct: response.data.nameproduct,
+    //   price: response.data.price,
+    //   image: response.data.image,
+    // })
+    // console.log(response)
+    // setProduct(response.data)
   })
+
+  useEffect(() => {
+    if (products) {
+      setPreview(products.image)
+      setDataProduct({
+        ...DataProduct,
+        nameproduct: products.nameproduct,
+        price: products.price,
+      })
+      setProduct(products)
+    }
+  }, [products])
 
   const handleOnChange = (e) => {
     setDataProduct({
@@ -94,25 +108,34 @@ function UpdateProduct() {
     try {
       e.preventDefault()
 
+      // Configuration
+      const config = {
+        // method: "PATCH",
+        headers: {
+          "Content-type": "multipart/form-data",
+          // Authorization: "Basic " + localStorage.token,
+        },
+      }
+
       // Store data with FormData as object
       const formData = new FormData()
-      if (preview) {
-        formData.set("image", preview[0], preview[0]?.nameproduct)
+      if (DataProduct.image) {
+        formData.set(
+          "image",
+          DataProduct.image[0],
+          DataProduct.image[0]?.nameproduct
+        )
       }
       formData.set("nameproduct", DataProduct.nameproduct)
       formData.set("price", DataProduct.price)
 
-      // Configuration
-      const config = {
-        method: "PATCH",
-        headers: {
-          Authorization: "Basic " + localStorage.token,
-        },
-        body: formData,
-      }
-
       // Insert product data
-      const response = await API.patch("/product/" + product.id, config)
+      const response = await API.patch(
+        "/product/" + products.id,
+        formData,
+        config
+      )
+      console.log(response.data)
 
       navigate("/ProductAdmin")
     } catch (error) {
@@ -138,7 +161,7 @@ function UpdateProduct() {
                   <Form.Control
                     onChange={handleOnChange}
                     name="nameproduct"
-                    value={DataProduct.nameproduct}
+                    value={DataProduct?.nameproduct}
                     style={{
                       border: "2px solid #BD0707",
                       backgroundColor: "#E0C8C840",
@@ -151,7 +174,7 @@ function UpdateProduct() {
                   <Form.Control
                     onChange={handleOnChange}
                     name="price"
-                    value={DataProduct.price}
+                    value={DataProduct?.price}
                     style={{
                       border: "2px solid #BD0707",
                       backgroundColor: "#E0C8C840",
@@ -164,7 +187,7 @@ function UpdateProduct() {
                   <Form.Control
                     onChange={handleOnChange}
                     name="image"
-                    value={DataProduct.image}
+                    // value={DataProduct?.image}
                     style={{
                       border: "2px solid #BD0707",
                       backgroundColor: "#E0C8C840",
@@ -184,20 +207,20 @@ function UpdateProduct() {
               </Form>
             </Card.Body>
           </Col>
-          {!preview ? (
+          {preview && (
             <Card.Img
               variant="top"
-              src={DataProduct.image}
+              src={preview}
               alt=""
               style={style.ImgProduct}
             />
-          ) : (
-            <Card.Img
-              variant="top"
-              src={URL.createObjectURL(preview[0])}
-              alt=""
-              style={style.ImgProduct}
-            />
+            // ) : (
+            //   <Card.Img
+            //     variant="top"
+            //     src={URL.createObjectURL(preview[0])}
+            //     alt=""
+            //     style={style.ImgProduct}
+            //   />
           )}
         </Row>
       </Card>

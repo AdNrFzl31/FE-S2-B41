@@ -2,6 +2,7 @@ import "bootstrap/dist/css/bootstrap.min.css"
 import React, { useState } from "react"
 import { Button, Card, Col, Container, Form, Row } from "react-bootstrap"
 import { useMutation } from "react-query"
+import ModalPopUpProduct from "../component/PopUpProduct"
 import { API } from "../confiq/api"
 
 // import { BrowserRouter as Router, Routes, Route, Link  } from 'react-router-dom';
@@ -111,96 +112,81 @@ function AddProduct() {
     }
   })
 
-  // const products = []
-  // const addDataProduct = JSON.parse(localStorage.getItem("DATA_PRODUCT"))
-  // const handleOnSubmit = (e) => {
-  //   e.preventDefault()
-
-  //   if (addDataProduct === null) {
-  //     products.push(DataProduct)
-  //     localStorage.setItem("DATA_PRODUCT", JSON.stringify(products))
-  //   } else {
-  //     for (let i = 0; i < addDataProduct.length; i++) {
-  //       products.push(addDataProduct[i])
-  //     }
-  //     DataProduct.id = addDataProduct.length
-  //     DataProduct.price = parseInt(DataProduct.price)
-  //     products.push(DataProduct)
-  //     localStorage.setItem("DATA_PRODUCT", JSON.stringify(products))
-  //   }
-  //   document.getElementById("addProduct").reset()
-  // }
+  const [modalShow, setModalShow] = useState(false)
 
   return (
-    <Container className="my-5">
-      <Card className="mt-5" style={{ border: "white" }}>
-        <Row>
-          <Col sm={8}>
-            <Card.Body className="m-auto" style={{ width: "80%" }}>
-              <Card.Title className="mb-5" style={style.textTitle}>
-                Product
-              </Card.Title>
-              <Form
-                onSubmit={(e) => handleSubmit.mutate(e)}
-                id="addProduct"
-                className="m-auto mt-3 d-grid gap-2 w-100"
-              >
-                <Form.Group className="mb-3 " controlId="nameProduct">
-                  <Form.Control
-                    onChange={handleOnChange}
-                    name="nameproduct"
-                    style={{
-                      border: "2px solid #BD0707",
-                      backgroundColor: "#E0C8C840",
-                    }}
-                    type="text"
-                    placeholder="Name Product"
-                  />
-                </Form.Group>
-                <Form.Group className="mb-3" controlId="price">
-                  <Form.Control
-                    onChange={handleOnChange}
-                    name="price"
-                    style={{
-                      border: "2px solid #BD0707",
-                      backgroundColor: "#E0C8C840",
-                    }}
-                    type="number"
-                    placeholder="Price"
-                  />
-                </Form.Group>
-                <Form.Group className="mb-3" controlId="imgProduct">
-                  <Form.Control
-                    onChange={handleOnChange}
-                    name="image"
-                    style={{
-                      border: "2px solid #BD0707",
-                      backgroundColor: "#E0C8C840",
-                    }}
-                    type="file"
-                    placeholder="Photo Product"
-                  />
-                </Form.Group>
-                <Button
-                  variant="outline-light"
-                  style={style.bgColor}
-                  type="submit"
-                  // onClick={() => setPopUp(true)}
+    <>
+      <Container className="my-5">
+        <Card className="mt-5" style={{ border: "white" }}>
+          <Row>
+            <Col sm={8}>
+              <Card.Body className="m-auto" style={{ width: "80%" }}>
+                <Card.Title className="mb-5" style={style.textTitle}>
+                  Product
+                </Card.Title>
+                <Form
+                  onSubmit={(e) => handleSubmit.mutate(e)}
+                  id="addProduct"
+                  className="m-auto mt-3 d-grid gap-2 w-100"
                 >
-                  Add Product
-                </Button>
-              </Form>
-            </Card.Body>
-          </Col>
-          {preview && (
-            <Card.Img
-              variant="top"
-              src={preview}
-              alt={preview}
-              style={style.ImgProduct}
-            />
-          )}
-          {/* {popUp && (
+                  <Form.Group className="mb-3 " controlId="nameProduct">
+                    <Form.Control
+                      onChange={handleOnChange}
+                      name="nameproduct"
+                      style={{
+                        border: "2px solid #BD0707",
+                        backgroundColor: "#E0C8C840",
+                      }}
+                      type="text"
+                      placeholder="Name Product"
+                    />
+                  </Form.Group>
+                  <Form.Group className="mb-3" controlId="price">
+                    <Form.Control
+                      onChange={handleOnChange}
+                      name="price"
+                      style={{
+                        border: "2px solid #BD0707",
+                        backgroundColor: "#E0C8C840",
+                      }}
+                      type="number"
+                      placeholder="Price"
+                    />
+                  </Form.Group>
+                  <Form.Group className="mb-3" controlId="imgProduct">
+                    <Form.Control
+                      onChange={handleOnChange}
+                      name="image"
+                      style={{
+                        border: "2px solid #BD0707",
+                        backgroundColor: "#E0C8C840",
+                      }}
+                      type="file"
+                      placeholder="Photo Product"
+                    />
+                  </Form.Group>
+                  <Button
+                    variant="outline-light"
+                    style={style.bgColor}
+                    type="submit"
+                    onClick={() => {
+                      setModalShow(true)
+                    }}
+                  >
+                    Add Product
+                  </Button>
+                </Form>
+              </Card.Body>
+            </Col>
+            {preview && (
+              <Card.Img
+                variant="top"
+                src={preview}
+                alt={preview}
+                style={style.ImgProduct}
+              />
+            )}
+            {/* {popUp && (
             <section
               className="modal fixed z-index-3 w100 h100 flex jc-center ai-center"
               onClick={() => setPopUp(false)}
@@ -210,9 +196,11 @@ function AddProduct() {
               </div>
             </section>
           )} */}
-        </Row>
-      </Card>
-    </Container>
+          </Row>
+        </Card>
+      </Container>
+      <ModalPopUpProduct show={modalShow} onHide={() => setModalShow(false)} />
+    </>
   )
 }
 

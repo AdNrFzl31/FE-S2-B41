@@ -29,7 +29,7 @@ function App() {
       setAuthToken(localStorage.token)
     }
 
-    if (state.isLogin == false && !isLoading) {
+    if (state.isLogin === false && !isLoading) {
       navigate("/")
     }
   }, [state])
