@@ -63,10 +63,11 @@ const style = {
 }
 
 function Cart() {
+  // const { id } = useParams()
   const [state] = useContext(UserContext)
 
   let { data: order, refetch } = useQuery("ordersCache", async () => {
-    const response = await API.get("/orders")
+    const response = await API.get("/orders-id")
     return response.data.data
   })
   console.log("data order: ", order)
@@ -89,7 +90,7 @@ function Cart() {
     name: "",
     email: "",
     phone: "",
-    posCode: "",
+    poscode: "",
     address: "",
   })
 
@@ -103,8 +104,11 @@ function Cart() {
   }
 
   let navigate = useNavigate()
-  const HandlePay = useMutation(async (id) => {
+
+  const HandlePay = useMutation(async (e) => {
     try {
+      e.preventDefault()
+
       const config = {
         headers: {
           "Content-type": "application/json",
@@ -112,12 +116,12 @@ function Cart() {
       }
       const requestBody = JSON.stringify(DataPay)
       const response = await API.patch(
-        "/transaction/" + id,
+        "/transaction/" + IDTrans,
         requestBody,
         config
       )
-      // refetch()
-      // navigate("/")
+      refetch()
+      navigate("/")
       console.log("Transaksi", response)
     } catch (error) {
       console.log(error)
@@ -360,7 +364,7 @@ function Cart() {
                 </Col>
                 <Col sm={4} className="pt-5">
                   <Form
-                    onSubmit={() => HandlePay.mutate(IDTrans)}
+                    onSubmit={(e) => HandlePay.mutate(e)}
                     className="m-auto mt-3 d-grid gap-4 w-100"
                   >
                     <Form.Group className="mb-3 " controlId="name">
@@ -400,7 +404,7 @@ function Cart() {
                       <Form.Control
                         onChange={handleOnChange}
                         // value={DataPay.posCode}
-                        name="posCode"
+                        name="poscode"
                         style={{ border: "2px solid #BD0707" }}
                         type="text"
                         placeholder="Pos Code"

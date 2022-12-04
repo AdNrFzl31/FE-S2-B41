@@ -235,7 +235,7 @@ function Navs() {
   const [showRegister, setShowRegister] = useState(false)
 
   const { data: order } = useQuery("ordersCache", async () => {
-    const response = await API.get("/orders")
+    const response = await API.get("/orders-id")
     return response.data.data
   })
 
@@ -243,37 +243,15 @@ function Navs() {
     <Navbar collapseOnSelect expand="lg" bg="light" variant="light">
       <Container>
         <Navbar.Brand href="#home">
-          {state.isLogin === false ? (
-            <Nav.Link href="/">
-              <img
-                alt=""
-                src={Image}
-                width="50"
-                height="50"
-                className="d-inline-block align-top"
-              />
-            </Nav.Link>
-          ) : state.user.role === "admin" ? (
-            <Nav.Link href="/Admin">
-              <img
-                alt=""
-                src={Image}
-                width="50"
-                height="50"
-                className="d-inline-block align-top"
-              />
-            </Nav.Link>
-          ) : (
-            <Nav.Link href="/">
-              <img
-                alt=""
-                src={Image}
-                width="50"
-                height="50"
-                className="d-inline-block align-top"
-              />
-            </Nav.Link>
-          )}
+          <Nav.Link href="/">
+            <img
+              alt=""
+              src={Image}
+              width="50"
+              height="50"
+              className="d-inline-block align-top"
+            />
+          </Nav.Link>
         </Navbar.Brand>
         <Navbar.Toggle aria-controls="responsive-navbar-nav" />
         <Navbar.Collapse

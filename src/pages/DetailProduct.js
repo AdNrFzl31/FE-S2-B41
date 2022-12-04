@@ -88,6 +88,7 @@ function DetailProduct() {
       setTopingPrice(Number(topingPrice) - Number(price))
     }
   }
+
   let subTotal = productdetail?.price + topingPrice
 
   const HandleAddCart = useMutation(async (e) => {

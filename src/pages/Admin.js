@@ -1,9 +1,16 @@
 import "bootstrap/dist/css/bootstrap.min.css"
-import { Container, Button, Table, Stack } from "react-bootstrap"
+import { useContext } from "react"
+import { Container, Button, Table, Stack, Badge } from "react-bootstrap"
+import { useMutation, useQuery } from "react-query"
 import { Link } from "react-router-dom"
 import Approve from "../assets/image/Approve.png"
 import Cancel from "../assets/image/Cancel.png"
 import Jumbotron from "../component/Jumbotron"
+import { API } from "../confiq/api"
+import { UserContext } from "../context/UserContext"
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
+import { faXmark } from "@fortawesome/free-solid-svg-icons"
+import { faCheck } from "@fortawesome/free-solid-svg-icons"
 
 const style = {
   textTitle: {
@@ -45,9 +52,49 @@ const style = {
 }
 
 function Income() {
+  const [state] = useContext(UserContext)
+
+  let { data: transall, refetch } = useQuery("TransTable", async () => {
+    if (state.user.role === "admin") {
+      const response = await API.get("/transactions")
+      return response.data.data
+    }
+  })
+
+  const formatIDR = new Intl.NumberFormat(undefined, {
+    style: "currency",
+    currency: "IDR",
+    maximumFractionDigits: 0,
+  })
+
+  let income = 0
+  // console.log(transall.data.subtotal)
+
+  const HandleCancel = useMutation(async (id) => {
+    console.log("Cancel ID =>", id)
+    try {
+      const response = await API.patch("/canceltrans/" + id)
+      refetch()
+      console.log(response)
+    } catch (error) {
+      console.log(error)
+    }
+  })
+
+  const HandleAccept = useMutation(async (id) => {
+    console.log("Accept ID =>", id)
+    try {
+      const response = await API.patch("/accepttrans/" + id)
+      refetch()
+      console.log(response)
+    } catch (error) {
+      console.log(error)
+    }
+  })
+
   return (
     <Container className="mt-5">
-      <Jumbotron />
+      {/* <Jumbotron /> */}
       <h3 style={style.textTitle} className="my-5">
         Income transaction
       </h3>
@@ -64,83 +111,76 @@ function Income() {
           </tr>
         </thead>
         <tbody>
+          {transall === 0 ? (
+            <tr>
+              <td colSpan={6}>Not Transaction</td>
+            </tr>
+          ) : (
+            transall?.map((element, number) => {
+              number += 1
+              if (element.status === "Success") {
+                income += element.price
+                console.log("income : ", element.price)
+              }
+
+              return (
+                <tr>
+                  <td>{number}</td>
+                  <td>{element.name}</td>
+                  <td>{element.address}</td>
+                  <td>{element.poscode}</td>
+                  <td>
+                    <Link to="/Transaction" style={style.link}>
+                      {formatIDR.format(element.price)}
+                    </Link>
+                  </td>
+                  {element.status === "Payment" ? (
+                    <label className="text-warning">Waiting Approve</label>
+                  ) : element.status === "Success" ? (
+                    <label className="text-success">Success</label>
+                  ) : element.status === "Cancel" ? (
+                    <label className="text-danger">Cancel</label>
+                  ) : null}
+                  <td>
+                    {element.status === "Payment" ? (
+                      <Stack direction="horizontal" gap={3}>
+                        <Button
+                          variant="danger"
+                          onClick={() => HandleCancel.mutate(element.id)}
+                        >
+                          Cancel {element.id}
+                        </Button>
+                        <Button
+                          variant="success"
+                          onClick={() => HandleAccept.mutate(element.id)}
+                        >
+                          Accept
+                        </Button>
+                      </Stack>
+                    ) : element.status === "Success" ? (
+                      <Badge
+                        className="rounded-circle bg-success"
+                        style={{ width: "25px" }}
+                      >
+                        <FontAwesomeIcon icon={faCheck} />
+                      </Badge>
+                    ) : element.status === "Cancel" ? (
+                      <Badge
+                        className="rounded-circle bg-danger"
+                        style={{ width: "25px" }}
+                      >
+                        <FontAwesomeIcon icon={faXmark} />
+                      </Badge>
+                    ) : null}
+                  </td>
+                </tr>
+              )
+            })
+          )}
+
           <tr>
-            <td>1</td>
-            <td>Sugeng No Pants</td>
-            <td>Cileungsi</td>
-            <td>16820</td>
-            <td>
-              <Link to="/Transaction" style={style.link}>
-                69.000
-              </Link>
-            </td>
-            <td style={style.warning}>Waiting Approve</td>
-            <td>
-              <Stack
-                direction="horizontal"
-                gap={3}
-                className="justify-content-center"
-              >
-                <Button
-                  className="w-50 p-0"
-                  size="sm"
-                  style={{ border: "white", backgroundColor: "#FF0742" }}
-                >
-                  Cancel
-                </Button>
-                <Button
-                  className="w-50 p-0"
-                  size="sm"
-                  style={{ border: "white", backgroundColor: "#0ACF83" }}
-                >
-                  Approve
-                </Button>
-              </Stack>
-            </td>
-          </tr>
-          <tr>
-            <td>2</td>
-            <td>Haris Gams</td>
-            <td>Serang</td>
-            <td>42111</td>
-            <td>
-              <Link to="/Transaction" style={style.link}>
-                30.000
-              </Link>
-            </td>
-            <td style={style.success}>Success</td>
-            <td className="d-flex justify-content-center">
-              <img alt="" src={Approve} style={{ width: "12%" }} />
-            </td>
-          </tr>
-          <tr>
-            <td>3</td>
-            <td>Aziz Union</td>
-            <td>Bekasi</td>
-            <td>13450</td>
-            <td>
-              <Link to="/Transaction" style={style.link}>
-                28.000
-              </Link>
-            </td>
-            <td style={style.danger}>Cancel</td>
-            <td className="d-flex justify-content-center">
-              <img alt="" src={Cancel} />
-            </td>
-          </tr>
-          <tr>
-            <td>4</td>
-            <td>Lae Tanjung Balai</td>
-            <td>Tanjung Balai</td>
-            <td>21331</td>
-            <td>
-              <Link to="/Transaction" style={style.link}>
-                30.000
-              </Link>
-            </td>
-            <td style={style.light}>On The Way</td>
-            <td className="d-flex justify-content-center">
-              <img alt="" src={Approve} style={{ width: "12%" }} />
+            <td colSpan={7} className="fw-bold">
+              Income : {formatIDR.format(income)}
             </td>
           </tr>
         </tbody>
