@@ -10,6 +10,7 @@ import AddToping from "./pages/AddToping.js"
 import Income from "./pages/Admin.js"
 import Cart from "./pages/Cart.js"
 import DetailProduct from "./pages/DetailProduct.js"
+import HistoryOrder from "./pages/historytransaksi.js"
 import Home from "./pages/Home.js"
 import ProductAdmin from "./pages/ProdutAdmin.js"
 import Profile from "./pages/Profile.js"
@@ -87,6 +88,7 @@ function App() {
             <Route path="/UpdateToping/:id" element={<UpdateToping />} />
             <Route path="/AddToping" element={<AddToping />} />
             <Route path="/Carts" element={<Cart />} />
+            {/* <Route path="/HistoryOrder" element={<HistoryOrder />} /> */}
           </Routes>
         </>
       )}

@@ -8,6 +8,7 @@ import Profil2 from "../assets/image/Profil2.png"
 import { UserContext } from "../context/UserContext"
 import { API } from "../confiq/api"
 import { useQuery } from "react-query"
+import HistoryOrder from "./historytransaksi"
 
 function Profile() {
   // const DataLogin = JSON.parse(localStorage.getItem("VALUE_LOGIN"))
@@ -48,7 +49,9 @@ function Profile() {
           </Row>
         </Card>
 
-        <Card border="white" style={{ width: "50%" }}>
+        <HistoryOrder />
+
+        {/* <Card border="white" style={{ width: "50%" }}>
           <h1
             className="fw-bold"
             style={{ color: "#BD0707", fontSize: "24px", marginBottom: "20px" }}
@@ -181,7 +184,7 @@ function Profile() {
               </Stack>
             </Card>
           </Row>
-        </Card>
+        </Card> */}
       </Row>
     </Container>
   )
