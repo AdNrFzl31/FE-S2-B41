@@ -16,7 +16,8 @@ import { UserContext } from "../context/UserContext"
 import AddProduct from "../assets/image/AddProduct.png"
 import AddToping from "../assets/image/AddToping.png"
 import Basket from "../assets/image/Basket.png"
-import Image from "../assets/image/Profil1.png"
+import Profil from "../assets/image/Profil1.png"
+import Image from "../assets/image/Logo1.png"
 import Logout from "../assets/image/Logout.png"
 import User from "../assets/image/User.png"
 import Login from "../pages/Login.js"
@@ -89,7 +90,7 @@ function DropdownUser() {
     >
       <img
         alt=""
-        src={Image}
+        src={Profil}
         className="d-inline-block align-top btn p-0 m-auto"
         style={{
           width: "60px",
@@ -213,7 +214,7 @@ function DropdownAdmin() {
     >
       <img
         alt=""
-        src={Image}
+        src={Profil}
         className="d-inline-block align-top btn p-0 m-auto "
         style={{
           width: "60px",
