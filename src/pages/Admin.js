@@ -148,7 +148,7 @@ function Income() {
                           variant="danger"
                           onClick={() => HandleCancel.mutate(element.id)}
                         >
-                          Cancel {element.id}
+                          Cancel
                         </Button>
                         <Button
                           variant="success"

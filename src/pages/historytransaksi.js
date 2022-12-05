@@ -72,7 +72,7 @@ function HistoryOrder() {
                                 <Card.Subtitle
                                   style={{ fontSize: "10pt", color: "#BD0707" }}
                                 >
-                                  <b>Saturday</b>, 5 March 2020
+                                  <b>Monday</b>, 5 December 2022
                                 </Card.Subtitle>
                                 <Card.Text
                                   style={{

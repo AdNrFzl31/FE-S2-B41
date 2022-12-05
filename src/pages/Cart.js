@@ -67,7 +67,7 @@ function Cart() {
   const [state] = useContext(UserContext)
 
   let { data: order, refetch } = useQuery("ordersCache", async () => {
-    const response = await API.get("/orders-id")
+    const response = await API.get("/myorder")
     return response.data.data
   })
   console.log("data order: ", order)
