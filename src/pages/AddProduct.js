@@ -186,16 +186,6 @@ function AddProduct() {
                 style={style.ImgProduct}
               />
             )}
-            {/* {popUp && (
-            <section
-              className="modal fixed z-index-3 w100 h100 flex jc-center ai-center"
-              onClick={() => setPopUp(false)}
-            >
-              <div className="notification-background">
-                <h5>Product Has Been Added Successfully</h5>
-              </div>
-            </section>
-          )} */}
           </Row>
         </Card>
       </Container>
