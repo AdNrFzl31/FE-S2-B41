@@ -27,10 +27,17 @@ import { API } from "../confiq/api"
 
 function DropdownUser() {
   // const Loginstate = JSON.parse(localStorage.getItem("VALUE_LOGIN"))
-  let navigate = useNavigate()
 
   const [state, dispatch] = useContext(UserContext)
-  console.log(state.isLogin)
+  console.log("Profile user : ", state)
+
+  let { data: Profile, refetch } = useQuery("ProfileCache", async () => {
+    const response = await API.get("/user/" + state.user.id)
+    return response.data.data
+  })
+  console.log("data PROFILE: ", Profile)
+  let navigate = useNavigate()
+
   const logout = () => {
     dispatch({
       type: "LOGOUT",
@@ -90,7 +97,8 @@ function DropdownUser() {
     >
       <img
         alt=""
-        src={Profil}
+        src={Profile?.image}
+        // src={Profil}
         className="d-inline-block align-top btn p-0 m-auto"
         style={{
           width: "60px",
@@ -106,10 +114,18 @@ function DropdownUser() {
 
 function DropdownAdmin() {
   // const Loginstate = JSON.parse(localStorage.getItem("DATA_USER"))
-  let navigate = useNavigate()
 
   const [state, dispatch] = useContext(UserContext)
-  console.log(state.isLogin)
+  console.log("Profile user : ", state)
+
+  let { data: Profile, refetch } = useQuery("ProfileCache", async () => {
+    const response = await API.get("/user/" + state.user.id)
+    return response.data.data
+  })
+  console.log("data PROFILE: ", Profile)
+
+  let navigate = useNavigate()
+
   const logout = () => {
     dispatch({
       type: "LOGOUT",
@@ -214,7 +230,8 @@ function DropdownAdmin() {
     >
       <img
         alt=""
-        src={Profil}
+        src={Profile?.image}
+        // src={Profil}
         className="d-inline-block align-top btn p-0 m-auto "
         style={{
           width: "60px",
