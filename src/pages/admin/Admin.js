@@ -3,14 +3,14 @@ import { useContext } from "react"
 import { Container, Button, Table, Stack, Badge } from "react-bootstrap"
 import { useMutation, useQuery } from "react-query"
 import { Link } from "react-router-dom"
-import Approve from "../assets/image/Approve.png"
-import Cancel from "../assets/image/Cancel.png"
-import Jumbotron from "../component/Jumbotron"
-import { API } from "../confiq/api"
-import { UserContext } from "../context/UserContext"
+import { API } from "../../confiq/api"
+import { UserContext } from "../../context/UserContext"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faXmark } from "@fortawesome/free-solid-svg-icons"
 import { faCheck } from "@fortawesome/free-solid-svg-icons"
+// import Approve from "../../assets/image/Approve.png"
+// import Cancel from "../../assets/image/Cancel.png"
+// import Jumbotron from "../../component/Jumbotron"
 
 const style = {
   textTitle: {
@@ -68,25 +68,25 @@ function Income() {
   })
 
   let income = 0
-  // console.log(transall.data.subtotal)
+  // //console.log(transall.data.subtotal)
 
   const HandleCancel = useMutation(async (id) => {
-    console.log("Cancel ID =>", id)
+    //console.log("Cancel ID =>", id)
     try {
       const response = await API.patch("/canceltrans/" + id)
       refetch()
-      console.log(response)
+      //console.log(response)
     } catch (error) {
       console.log(error)
     }
   })
 
   const HandleAccept = useMutation(async (id) => {
-    console.log("Accept ID =>", id)
+    //console.log("Accept ID =>", id)
     try {
       const response = await API.patch("/accepttrans/" + id)
       refetch()
-      console.log(response)
+      //console.log(response)
     } catch (error) {
       console.log(error)
     }
@@ -120,7 +120,7 @@ function Income() {
               number += 1
               if (element.status === "Success") {
                 income += element.price
-                console.log("income : ", element.price)
+                //console.log("income : ", element.price)
               }
 
               return (

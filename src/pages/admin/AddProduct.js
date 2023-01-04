@@ -2,8 +2,8 @@ import "bootstrap/dist/css/bootstrap.min.css"
 import React, { useState } from "react"
 import { Button, Card, Col, Container, Form, Row } from "react-bootstrap"
 import { useMutation } from "react-query"
-import ModalPopUpProduct from "../component/PopUpProduct"
-import { API } from "../confiq/api"
+import { API } from "../../confiq/api"
+import ModalPopUpProduct from "../../component/popup/PopUpProduct"
 
 // import { BrowserRouter as Router, Routes, Route, Link  } from 'react-router-dom';
 
@@ -104,7 +104,7 @@ function AddProduct() {
 
       // Insert product data
       const response = await API.post("/product", formData, config)
-      console.log(response)
+      //console.log(response)
 
       // navigate("/add-product")
     } catch (error) {

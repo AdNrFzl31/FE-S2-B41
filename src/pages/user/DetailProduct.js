@@ -3,9 +3,9 @@ import { useContext, useEffect, useState } from "react"
 import { Badge, Button, Card, Col, Container, Row } from "react-bootstrap"
 import { useMutation, useQuery } from "react-query"
 import { useLocation, useNavigate, useParams } from "react-router-dom"
-import Approve from "../assets/image/Approve.png"
-import { API } from "../confiq/api"
-import { UserContext } from "../context/UserContext"
+import Approve from "../../assets/image/Approve.png"
+import { API } from "../../confiq/api"
+import { UserContext } from "../../context/UserContext"
 
 const style = {
   card: {
@@ -64,16 +64,22 @@ function DetailProduct() {
   })
 
   //produk
-  let { data: productdetail } = useQuery("productdetailCache", async () => {
-    const response = await API.get("/product/" + id)
-    return response.data.data
-  })
+  let { data: productdetail, refetch: productRefetch } = useQuery(
+    "productdetailCache",
+    async () => {
+      const response = await API.get("/product/" + id)
+      return response.data.data
+    }
+  )
 
   /// toping
-  let { data: topings } = useQuery("topingsCache", async () => {
-    const response = await API.get("/topings")
-    return response.data.data
-  })
+  let { data: topings, refetch: topingRefetch } = useQuery(
+    "topingsCache",
+    async () => {
+      const response = await API.get("/toppings")
+      return response.data.data
+    }
+  )
 
   const [topingCheck, setTopingCheck] = useState([]) //ID TOPING
   const [topingPrice, setTopingPrice] = useState([]) //HARGA TOPING
@@ -111,7 +117,7 @@ function DetailProduct() {
       const body = JSON.stringify(data)
 
       const respone = await API.post("/order/" + productdetail.id, body, config)
-      console.log("respon Order :", respone)
+      //console.log("respon Order :", respone)
       navigate("/Carts")
     } catch (error) {
       console.log(error)
@@ -147,6 +153,7 @@ function DetailProduct() {
                 {/* Toping */}
                 {topings?.map((toping) => (
                   <div
+                    key={toping?.id}
                     className="p-3"
                     onClick={() => handleChecked(toping?.id, toping?.price)}
                   >

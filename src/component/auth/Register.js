@@ -3,7 +3,7 @@ import React, { useState } from "react"
 import { Button, Form, Modal, Alert, Image } from "react-bootstrap"
 import { Link } from "react-router-dom"
 import { useMutation } from "react-query"
-import { API } from "../confiq/api"
+import { API } from "../../confiq/api"
 // import { BrowserRouter as Router, Routes, Route, Link  } from 'react-router-dom';
 
 const style = {
@@ -83,7 +83,7 @@ function Register({ show, onHide, setShowLogin, setShowRegister }) {
 
       // Insert data user to database
       const response = await API.post("/register", formData, config)
-      console.log(response)
+      //console.log(response)
       // if (response.data.status === "success...") {
       //   const alert = (
       //     <Alert variant="success" className="py-1">

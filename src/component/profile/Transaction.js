@@ -1,8 +1,8 @@
-import "bootstrap/dist/css/bootstrap.min.css";
-import { Button, Card, Col, Container, Row, Stack } from "react-bootstrap";
-import Logo from "../assets/image/Logo2.png";
-import Barcode from "../assets/image/Barcode.png";
-import Products from "../assets/image/Product1.png";
+import "bootstrap/dist/css/bootstrap.min.css"
+import { Button, Card, Col, Container, Row, Stack } from "react-bootstrap"
+import Logo from "../../assets/image/Logo2.png"
+import Barcode from "../../assets/image/Barcode.png"
+import Products from "../../assets/image/Product1.png"
 // import { BrowserRouter as Router, Routes, Route, Link  } from 'react-router-dom';
 
 const style = {
@@ -42,7 +42,7 @@ const style = {
     // top: "40%",
     // left: "83%",
   },
-};
+}
 
 function Transaction() {
   return (
@@ -210,7 +210,7 @@ function Transaction() {
         </Row>
       </Card>
     </Container>
-  );
+  )
 }
 
-export default Transaction;
+export default Transaction

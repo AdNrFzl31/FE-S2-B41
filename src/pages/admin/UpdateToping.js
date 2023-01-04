@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react"
 import { Button, Card, Col, Container, Form, Row } from "react-bootstrap"
 import { useNavigate, useParams } from "react-router"
 import { useMutation, useQuery } from "react-query"
-import { API } from "../confiq/api"
+import { API } from "../../confiq/api"
 
 // import { BrowserRouter as Router, Routes, Route, Link  } from 'react-router-dom';
 
@@ -134,7 +134,7 @@ function UpdateToping() {
         formData,
         config
       )
-      console.log(response.data)
+      //console.log(response.data)
 
       navigate("/TopingAdmin")
     } catch (error) {

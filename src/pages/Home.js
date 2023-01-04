@@ -1,11 +1,11 @@
 import "bootstrap/dist/css/bootstrap.min.css"
-import { Container } from "react-bootstrap"
-import Jumbotron from "../component/Jumbotron"
-import Products from "../component/Product"
-import Navs from "../component/Navbar.js"
 import { useContext } from "react"
+import { Container } from "react-bootstrap"
 import { UserContext } from "../context/UserContext"
-import Income from "./Admin"
+import Income from "./admin/Admin"
+import Jumbotron from "../component/home/Jumbotron"
+import Products from "../component/home/Product"
+import Navs from "../component/navbar/Navbar"
 
 // import Income from "./Admin"
 // import { BrowserRouter as Router, Routes, Route, Link  } from 'react-router-dom';

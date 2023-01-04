@@ -1,6 +1,5 @@
 import "bootstrap/dist/css/bootstrap.min.css"
 import React, { useContext, useEffect, useState } from "react"
-
 import {
   Button,
   Container,
@@ -12,41 +11,20 @@ import {
   Badge,
 } from "react-bootstrap"
 import { useNavigate } from "react-router-dom"
-import { UserContext } from "../context/UserContext"
-import AddProduct from "../assets/image/AddProduct.png"
-import AddToping from "../assets/image/AddToping.png"
-import Basket from "../assets/image/Basket.png"
-import Profil from "../assets/image/Profil1.png"
-import Image from "../assets/image/Logo1.png"
-import Logout from "../assets/image/Logout.png"
-import User from "../assets/image/User.png"
-import Login from "../pages/Login.js"
-import Register from "../pages/Register.js"
 import { useQuery } from "react-query"
-import { API } from "../confiq/api"
+import { API } from "../../confiq/api"
+import { UserContext } from "../../context/UserContext"
+import AddProduct from "../../assets/image/AddProduct.png"
+import AddToping from "../../assets/image/AddToping.png"
+import Basket from "../../assets/image/Basket.png"
+import Profil from "../../assets/image/Profil1.png"
+import Image from "../../assets/image/Logo1.png"
+import Logout from "../../assets/image/Logout.png"
+import User from "../../assets/image/User.png"
+import Login from "../auth/Login.js"
+import Register from "../auth/Register.js"
 
-function DropdownUser() {
-  // const Loginstate = JSON.parse(localStorage.getItem("VALUE_LOGIN"))
-
-  const [state, dispatch] = useContext(UserContext)
-  console.log("Profile user : ", state)
-
-  let { data: Profile, refetch } = useQuery("ProfileCache", async () => {
-    const response = await API.get("/user/" + state.user.id)
-    return response.data.data
-  })
-  console.log("data PROFILE: ", Profile)
-  let navigate = useNavigate()
-
-  const logout = () => {
-    dispatch({
-      type: "LOGOUT",
-    })
-    navigate("/")
-    // localStorage.removeItem("VALUE_LOGIN")
-    // window.location.reload()
-  }
-
+function DropdownUser({ Profile, logout }) {
   return (
     <OverlayTrigger
       trigger="click"
@@ -112,29 +90,7 @@ function DropdownUser() {
   )
 }
 
-function DropdownAdmin() {
-  // const Loginstate = JSON.parse(localStorage.getItem("DATA_USER"))
-
-  const [state, dispatch] = useContext(UserContext)
-  console.log("Profile user : ", state)
-
-  let { data: Profile, refetch } = useQuery("ProfileCache", async () => {
-    const response = await API.get("/user/" + state.user.id)
-    return response.data.data
-  })
-  console.log("data PROFILE: ", Profile)
-
-  let navigate = useNavigate()
-
-  const logout = () => {
-    dispatch({
-      type: "LOGOUT",
-    })
-    navigate("/")
-    // localStorage.removeItem("VALUE_LOGIN")
-    // window.location.reload()
-  }
-
+function DropdownAdmin({ Profile, logout }) {
   return (
     <OverlayTrigger
       trigger="click"
@@ -247,36 +203,57 @@ function DropdownAdmin() {
 
 function Navs() {
   const [state, dispatch] = useContext(UserContext)
-  console.log("ini isi dari", state)
+  // //console.log("ini isi dari", state)
 
   const [showLogin, setShowLogin] = useState(false)
   const [showRegister, setShowRegister] = useState(false)
 
-  const { data: order } = useQuery("ordersCache", async () => {
-    const response = await API.get("/orders-id")
-    return response.data.data
-  })
+  const { data: order, refetch: orderRefetch } = useQuery(
+    "ordersCache",
+    async () => {
+      const response = await API.get("/orders")
+      return response.data.data
+    }
+  )
 
+  let { data: Profile, refetch: profileRefetch } = useQuery(
+    "ProfileCache",
+    async () => {
+      const response = await API.get("/user/" + state.user.id)
+      return response.data.data
+    }
+  )
+
+  let navigate = useNavigate()
+
+  const logout = () => {
+    dispatch({
+      type: "LOGOUT",
+    })
+    navigate("/")
+    // localStorage.removeItem("VALUE_LOGIN")
+    // window.location.reload()
+  }
   return (
     <Navbar collapseOnSelect expand="lg" bg="light" variant="light">
       <Container>
-        <Navbar.Brand href="#home">
-          <Nav.Link href="/">
-            <img
-              alt=""
-              src={Image}
-              width="50"
-              height="50"
-              className="d-inline-block align-top"
-            />
-          </Nav.Link>
+        <Navbar.Brand href="/">
+          {/* <Nav.Link href="/"> */}
+          <img
+            alt=""
+            src={Image}
+            width="50"
+            height="50"
+            className="d-inline-block align-top"
+          />
+          {/* </Nav.Link> */}
         </Navbar.Brand>
         <Navbar.Toggle aria-controls="responsive-navbar-nav" />
         <Navbar.Collapse
           id="responsive-navbar-nav"
           className="justify-content-end gap-3"
         >
-          <Nav className="me-auto"></Nav>
+          {/* <Nav className="me-auto"></Nav> */}
           <Nav>
             {state.isLogin === false ? (
               <>
@@ -300,6 +277,8 @@ function Navs() {
                 <Login
                   show={showLogin}
                   onHide={() => setShowLogin(false)}
+                  orderRefetch={orderRefetch}
+                  profileRefetch={profileRefetch}
                   setShowLogin={setShowLogin}
                   setShowRegister={setShowRegister}
                 />
@@ -314,7 +293,7 @@ function Navs() {
               <>
                 {state.user.role === "admin" ? (
                   // Navbar Admin
-                  <DropdownAdmin />
+                  <DropdownAdmin Profile={Profile} logout={logout} />
                 ) : (
                   // Navbar User
                   <Stack direction="horizontal">
@@ -336,7 +315,9 @@ function Navs() {
                       )}
                     </Nav.Link>
                     <DropdownUser
-                    // userDropdown={userDropdown} logOut={logOut}
+                      Profile={Profile}
+                      logout={logout}
+                      // userDropdown={userDropdown} logOut={logOut}
                     />
                   </Stack>
                 )}

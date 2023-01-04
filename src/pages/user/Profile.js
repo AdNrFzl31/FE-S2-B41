@@ -1,12 +1,12 @@
 import React, { useContext } from "react"
 import { Button, Card, Col, Container, Row, Stack } from "react-bootstrap"
 import { Link } from "react-router-dom"
-import Barcode from "../assets/image/Barcode.png"
-import Logo1 from "../assets/image/Logo1.png"
-import Product1 from "../assets/image/Product1.png"
-import Profil2 from "../assets/image/Profil2.png"
-import { UserContext } from "../context/UserContext"
-import { API } from "../confiq/api"
+import Barcode from "../../assets/image/Barcode.png"
+import Logo1 from "../../assets/image/Logo1.png"
+import Product1 from "../../assets/image/Product1.png"
+import Profil2 from "../../assets/image/Profil2.png"
+import { UserContext } from "../../context/UserContext"
+import { API } from "../../confiq/api"
 import { useQuery } from "react-query"
 import HistoryOrder from "./historytransaksi"
 
@@ -14,17 +14,17 @@ function Profile() {
   // const DataLogin = JSON.parse(localStorage.getItem("VALUE_LOGIN"))
 
   const [state] = useContext(UserContext)
-  console.log("Profile user : ", state)
+  //console.log("Profile user : ", state)
 
   let { data: Profile, refetch } = useQuery("ProfileCache", async () => {
     const response = await API.get("/user/" + state.user.id)
     return response.data.data
   })
-  console.log("data PROFILE: ", Profile)
+  //console.log("data PROFILE: ", Profile)
 
   return (
     <Container className="mb-5">
-      <Row className="justify-content-center my-5">
+      <Row className="justify-content-center my-5 gap-5">
         <Card border="white" style={{ width: "40%" }}>
           <h1
             className="fw-bold"

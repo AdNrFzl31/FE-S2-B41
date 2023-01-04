@@ -3,10 +3,10 @@ import { useEffect, useState } from "react"
 import { Container, Button, Table, Stack } from "react-bootstrap"
 import { useMutation, useQuery } from "react-query"
 import { Link, useNavigate } from "react-router-dom"
-import Approve from "../assets/image/Approve.png"
-import Cancel from "../assets/image/Cancel.png"
-import DeleteData from "../component/Delete"
-import { API } from "../confiq/api"
+import { API } from "../../confiq/api"
+import DeleteData from "../../component/modal/Delete"
+import Approve from "../../assets/image/Approve.png"
+import Cancel from "../../assets/image/Cancel.png"
 
 const style = {
   textTitle: {
@@ -47,7 +47,7 @@ const style = {
   },
 }
 
-function ProductAdmin() {
+function TopingAdmin() {
   const navigate = useNavigate()
   const [idDelete, setIdDelete] = useState(null)
   const [confirmDelete, setConfirmDelete] = useState(null)
@@ -57,7 +57,7 @@ function ProductAdmin() {
   const handleShow = () => setShow(true)
 
   const handleEdit = (id) => {
-    navigate("/UpdateProduct/" + id)
+    navigate("/UpdateToping/" + id)
   }
 
   const handleDelete = (id) => {
@@ -65,10 +65,10 @@ function ProductAdmin() {
     handleShow()
   }
 
-  const { data: productAdmin, refetch } = useQuery(
-    "productAdminCache",
+  const { data: topingAdmin, refetch } = useQuery(
+    "topingAdminCache",
     async () => {
-      const res = await API.get("/products")
+      const res = await API.get("/topings")
       return res.data.data
     }
   )
@@ -81,7 +81,7 @@ function ProductAdmin() {
           Authorization: "Basic " + localStorage.token,
         },
       }
-      await API.delete(`/product/${id}`, config)
+      await API.delete(`/toping/${id}`, config)
       refetch()
     } catch (error) {
       console.log(error)
@@ -102,23 +102,23 @@ function ProductAdmin() {
     <>
       <Container className="mt-5">
         <h3 style={style.textTitle} className="my-5">
-          Product List
+          Toping List
         </h3>
         <Table bordered hover>
           <thead>
             <tr style={style.bgColor}>
               <th>No</th>
-              <th>Name Product</th>
+              <th>Name Toping</th>
               <th>Price</th>
               <th>Image</th>
               <th style={style.textCenter}>Action</th>
             </tr>
           </thead>
           <tbody>
-            {productAdmin?.map((item, index) => (
+            {topingAdmin?.map((item, index) => (
               <tr>
                 <td>{index + 1}</td>
-                <td>{item.nameproduct}</td>
+                <td>{item.nametoping}</td>
                 <td>{item.price}</td>
                 <td>
                   <img
@@ -172,4 +172,4 @@ function ProductAdmin() {
   )
 }
 
-export default ProductAdmin
+export default TopingAdmin

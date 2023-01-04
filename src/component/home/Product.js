@@ -2,11 +2,11 @@ import "bootstrap/dist/css/bootstrap.min.css"
 import React, { useContext, useState } from "react"
 import { Card, Row } from "react-bootstrap"
 import { useNavigate } from "react-router-dom"
-import Login from "../pages/Login"
-import Register from "../pages/Register"
-import { UserContext } from "../context/UserContext"
+import { API } from "../../confiq/api"
+import { UserContext } from "../../context/UserContext"
 import { useQuery } from "react-query"
-import { API } from "../confiq/api"
+import Login from "../auth/Login"
+import Register from "../auth/Register"
 
 const style = {
   card: {
@@ -79,46 +79,43 @@ function Products() {
   const [showLogin, setShowLogin] = useState(false)
   const [showRegister, setShowRegister] = useState(false)
 
-  const { data: products = [] } = useQuery("productsCache", async () => {
+  const { data: products } = useQuery("productsCache", async () => {
     const res = await API.get("/products")
     return res.data.data
   })
-  console.log("data product home : ", products)
+  //console.log("data product home : ", products)
 
   return (
     <Row className="d-flex gap-4 justify-content-center">
-      {products?.map((data, index) => (
-        <>
-          <Card
-            key={index}
-            border="light"
-            style={style.card}
-            onClick={() =>
-              state.isLogin === false ? setShowLogin(true) : toDetail(data?.id)
-            }
-          >
-            <Card.Img variant="top" src={data?.image} style={style.Image} />
-            <Card.Body>
-              <Card.Title style={style.title}>{data?.nameproduct}</Card.Title>
-              <Card.Text style={style.price}>IDR {data?.price}</Card.Text>
-            </Card.Body>
-          </Card>
-
-          <Login
-            show={showLogin}
-            onHide={() => setShowLogin(false)}
-            setShowLogin={setShowLogin}
-            setShowRegister={setShowRegister}
-          />
-
-          <Register
-            show={showRegister}
-            onHide={() => setShowRegister(false)}
-            setShowLogin={setShowLogin}
-            setShowRegister={setShowRegister}
-          />
-        </>
+      {products?.map((data) => (
+        <Card
+          key={data?.id}
+          border="light"
+          style={style.card}
+          onClick={() =>
+            state.isLogin === false ? setShowLogin(true) : toDetail(data?.id)
+          }
+        >
+          <Card.Img variant="top" src={data?.image} style={style.Image} />
+          <Card.Body>
+            <Card.Title style={style.title}>{data?.nameproduct}</Card.Title>
+            <Card.Text style={style.price}>IDR {data?.price}</Card.Text>
+          </Card.Body>
+        </Card>
       ))}
+      <Login
+        show={showLogin}
+        onHide={() => setShowLogin(false)}
+        setShowLogin={setShowLogin}
+        setShowRegister={setShowRegister}
+      />
+
+      <Register
+        show={showRegister}
+        onHide={() => setShowRegister(false)}
+        setShowLogin={setShowLogin}
+        setShowRegister={setShowRegister}
+      />
     </Row>
   )
 }

@@ -3,8 +3,8 @@ import React, { useContext, useState } from "react"
 import { Alert, Button, Form, Modal } from "react-bootstrap"
 import { useMutation } from "react-query"
 import { Link, useNavigate } from "react-router-dom"
-import { UserContext } from "../context/UserContext"
-import { API } from "../confiq/api"
+import { UserContext } from "../../context/UserContext"
+import { API } from "../../confiq/api"
 
 // import { BrowserRouter as Router, Routes, Route, Link  } from 'react-router-dom';
 
@@ -36,7 +36,14 @@ const style = {
   },
 }
 
-const Login = ({ show, onHide, setShowLogin, setShowRegister }) => {
+const Login = ({
+  show,
+  onHide,
+  setShowLogin,
+  setShowRegister,
+  profileRefetch,
+  orderRefetch,
+}) => {
   const title = "Login"
   document.title = "Waysbucks | " + title
 
@@ -94,9 +101,11 @@ const Login = ({ show, onHide, setShowLogin, setShowRegister }) => {
             Login success
           </Alert>
         )
+        profileRefetch()
+        orderRefetch()
         setMessage(alert)
       }
-      console.log(response)
+      // console.log(response)
       setShowLogin(false)
     } catch (error) {
       const alert = (
@@ -105,7 +114,7 @@ const Login = ({ show, onHide, setShowLogin, setShowRegister }) => {
         </Alert>
       )
       setMessage(alert)
-      console.log(error)
+      // console.log(error)
     }
   })
 

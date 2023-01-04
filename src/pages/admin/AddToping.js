@@ -2,8 +2,8 @@ import "bootstrap/dist/css/bootstrap.min.css"
 import React, { useState } from "react"
 import { Button, Card, Col, Container, Form, Row } from "react-bootstrap"
 import { useMutation } from "react-query"
-import ModalPopUpToping from "../component/PopUpToping"
-import { API } from "../confiq/api"
+import { API } from "../../confiq/api"
+import ModalPopUpToping from "../../component/popup/PopUpToping"
 
 // import { BrowserRouter as Router, Routes, Route, Link  } from 'react-router-dom';
 
@@ -82,7 +82,7 @@ function AddToping() {
 
       // Insert product data
       const response = await API.post("/toping", formData, config)
-      console.log(response)
+      //console.log(response)
 
       // navigate("/add-product")
     } catch (error) {

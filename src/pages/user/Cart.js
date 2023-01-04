@@ -11,18 +11,18 @@ import {
   Row,
   Stack,
 } from "react-bootstrap"
-import FileUpload from "../assets/image/FileUpload.png"
-import Product1 from "../assets/image/Product1.png"
-import Trash from "../assets/image/Trash.png"
-import ModalPopUp from "../component/PopUP"
-import Jumbotron from "../component/Jumbotron"
-import Login from "./Login"
-import Products from "../component/Product"
-import Register from "./Register"
-import { UserContext } from "../context/UserContext"
-import { API } from "../confiq/api"
+import { UserContext } from "../../context/UserContext"
+import { API } from "../../confiq/api"
 import { useMutation, useQuery } from "react-query"
-import DeleteData from "../component/Delete"
+import Login from "../../component/auth/Login"
+import Register from "../../component/auth/Register"
+import ModalPopUp from "../../component/popup/PopUP"
+import Jumbotron from "../../component/home/Jumbotron"
+import Products from "../../component/home/Product"
+import DeleteData from "../../component/modal/Delete"
+import FileUpload from "../../assets/image/FileUpload.png"
+import Trash from "../../assets/image/Trash.png"
+import Product1 from "../../assets/image/Product1.png"
 
 const style = {
   textTitle: {
@@ -66,11 +66,14 @@ function Cart() {
   // const { id } = useParams()
   const [state] = useContext(UserContext)
 
-  let { data: order, refetch } = useQuery("ordersCache", async () => {
-    const response = await API.get("/myorder")
-    return response.data.data
-  })
-  console.log("data order: ", order)
+  let { data: order, refetch: orderRefetch } = useQuery(
+    "ordersCache",
+    async () => {
+      const response = await API.get("/orders-id")
+      return response.data.data
+    }
+  )
+  //console.log("data order: ", order)
 
   let Subtotal = 0
   let Qty = 0
@@ -120,21 +123,21 @@ function Cart() {
         requestBody,
         config
       )
-      console.log("cart : ", response)
+      //console.log("cart : ", response)
 
       const token = response.data.data.token
-      console.log(token)
+      // console.log(token)
 
       window.snap.pay(token, {
         onSuccess: function (result) {
           /* You may add your own implementation here */
           console.log(result)
-          navigate("/")
+          navigate("/profile")
         },
         onPending: function (result) {
           /* You may add your own implementation here */
           console.log(result)
-          navigate("/")
+          navigate("/profile")
         },
         onError: function (result) {
           /* You may add your own implementation here */
@@ -146,9 +149,9 @@ function Cart() {
         },
       })
 
-      refetch()
+      orderRefetch()
       navigate("/")
-      console.log("Transaksi", response)
+      //console.log("Transaksi", response)
     } catch (error) {
       console.log(error)
     }
@@ -264,8 +267,8 @@ function Cart() {
                       <Stack>
                         {/* Data pembelian product */}
 
-                        {order?.map((data, index) => (
-                          <Card.Body className="pe-0" key={index}>
+                        {order?.map((data) => (
+                          <Card.Body key={data?.id} className="pe-0">
                             <Stack direction="horizontal" gap={4}>
                               <Card.Img
                                 src={data?.product?.image}
@@ -287,27 +290,27 @@ function Cart() {
                                     className="align-items-start"
                                   >
                                     <Card.Text
-                                      className="m-0"
+                                      className="m-0 me-2"
                                       style={{
                                         fontSize: "15px",
                                         color: "#974A4A",
                                         fontWeight: "bold",
                                       }}
                                     >
-                                      Toping
+                                      Toping :
                                     </Card.Text>
-                                    <Card.Text
-                                      className="ms-2"
-                                      style={{
-                                        fontSize: "15px",
-                                        color: "#BD0707",
-                                      }}
-                                    >
-                                      :{" "}
-                                      {data.toppings?.map((data) => (
-                                        <>{data.nametoping}, </>
-                                      ))}
-                                    </Card.Text>
+                                    {data.toppings?.map((dataToping) => (
+                                      <Card.Text
+                                        key={dataToping?.id}
+                                        className="d-flex flex-wrap"
+                                        style={{
+                                          fontSize: "15px",
+                                          color: "#BD0707",
+                                        }}
+                                      >
+                                        {dataToping?.nametoping},
+                                      </Card.Text>
+                                    ))}
                                   </Stack>
                                 </Card.Body>
 
@@ -482,7 +485,7 @@ function Cart() {
                         style={{ backgroundColor: "#BD0707" }}
                         type="submit"
                       >
-                        Pay {IDTrans}
+                        Pay
                       </Button>
 
                       <ModalPopUp

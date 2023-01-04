@@ -1,6 +1,6 @@
 import "bootstrap/dist/css/bootstrap.min.css"
 import { Card } from "react-bootstrap"
-import Image from "../assets/image/Image1.png"
+import Image from "../../assets/image/Image1.png"
 
 // import { BrowserRouter as Router, Routes, Route, Link  } from 'react-router-dom';
 
